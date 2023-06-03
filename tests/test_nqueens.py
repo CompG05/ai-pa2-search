@@ -2,8 +2,6 @@ import pytest
 
 from problems.nqueens import NQueensState
 
-initial = NQueensState((3, 0, 2, 0, 5, 7, 1, 3))
-
 conflicted_config = [
     (4, 0, 7, 3, True),
     (7, 1, 1, 7, True),

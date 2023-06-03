@@ -5,7 +5,7 @@ from heuristics.nqueens import NQueensHeuristic
 from problems.knapsack import KnapsackProblem
 from problems.nqueens import NQueensProblem
 
-p = NQueensProblem(tuple([0]*8))
+p = NQueensProblem(dimension=8)
 h = NQueensHeuristic().create(INVERSE_N_CONFLICTS)
 h2 = KnapsackHeuristic().create(ACCUM_VALUE)
 
