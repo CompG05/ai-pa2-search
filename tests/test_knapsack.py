@@ -22,7 +22,7 @@ action_is_enabled_config = [
 
 @pytest.mark.parametrize("action, state, expected", action_is_enabled_config)
 def test_action_is_enabled(action, state, expected):
-    return action.is_enabled(state) == expected
+    assert action.is_enabled(state) == expected
 
 
 execute_action_config = [
@@ -33,7 +33,7 @@ execute_action_config = [
 
 @pytest.mark.parametrize("action, state, expected", execute_action_config)
 def test_action_execute(action, state, expected):
-    return action.execute(state) == expected
+    assert action.execute(state) == expected
 
 
 enabled_actions_config = [
@@ -49,4 +49,4 @@ enabled_actions_config = [
 def test_enabled_actions(state, expected):
     problem = KnapsackProblem(set(), weights, values, cap)
 
-    return problem.enabled_actions(state) == expected
+    assert problem.enabled_actions(state) == expected
