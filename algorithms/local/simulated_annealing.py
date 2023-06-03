@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 import math
 import random
 
@@ -7,18 +7,19 @@ from problems.problem import Problem
 
 
 class SimulatedAnnealing(SearchAlgorithm):
-    def __init__(self, heuristic: Callable[[Node], float], schedule: Callable[[float], float] = None):
+    def __init__(self, heuristic: Callable[[Node], float], schedule: Optional[Callable[[float], float]] = None):
         super().__init__()
         self.heuristic = heuristic
         self.schedule = schedule
-        if schedule is None:
-            self.set_schedule(1, 0.005, 0.05)
 
     def set_schedule(self, init_temp, decay, min_temp):
         self.schedule = lambda t: max(min_temp, init_temp * math.pow(math.e, -decay * t))
 
     def search(self, problem: Problem) -> Node:
-        current = Node(problem.initial_state)
+        if self.schedule is None:
+            raise Exception("Schedule not set")
+
+        current = Node(problem.state_factory.random())
         t = 1
         while True:
             T = self.schedule(t)

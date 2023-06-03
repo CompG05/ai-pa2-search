@@ -1,4 +1,3 @@
-import heapq
 import random
 import sys
 from typing import Callable
@@ -13,7 +12,7 @@ class HillClimbing(SearchAlgorithm):
         super().__init__()
 
     def search(self, problem: Problem) -> Node:
-        current: Node = Node(problem.initial_state)
+        current: Node = Node(problem.state_factory.random())
 
         while True:
             neighbors = current.expand(problem)
@@ -34,7 +33,7 @@ class HillClimbingSideMovements(SearchAlgorithm):
         super().__init__()
 
     def search(self, problem: Problem) -> Node:
-        current: Node = Node(problem.initial_state)
+        current: Node = Node(problem.state_factory.random())
         current_value = self.heuristic(current)
         current_k = self.k
 
@@ -44,20 +43,22 @@ class HillClimbingSideMovements(SearchAlgorithm):
             best_neighbor_value = -sys.float_info.max
             best_neighbors = []
 
-            for n in current.expand(problem):
-                neighbors.append(n)
-                v = self.heuristic(n)
+            for child in current.expand(problem):
+                neighbors.append(child)
+                v = self.heuristic(child)
                 if v > best_neighbor_value:
                     best_neighbor_value = v
-                    best_neighbor = n
-                    best_neighbors = [n]
+                    best_neighbor = child
+                    best_neighbors = [child]
                 elif v == best_neighbor_value:
-                    best_neighbors.append(n)
+                    best_neighbors.append(child)
 
-            if not neighbors:
+            if best_neighbor is None:  # current has no neighbors
                 return current
 
-            if best_neighbor_value < current_value or best_neighbor_value == current_value and current_k == 0:
+            if best_neighbor_value < current_value or (
+                best_neighbor_value == current_value and current_k == 0
+            ):
                 return current
 
             current = best_neighbor
@@ -72,7 +73,12 @@ class HillClimbingSideMovements(SearchAlgorithm):
 
 
 class RandomRestartHillClimbing(SearchAlgorithm):
-    def __init__(self, heuristic: Callable[[Node], float], exhaustive: bool = True, max_iterations: int = 50):
+    def __init__(
+        self,
+        heuristic: Callable[[Node], float],
+        exhaustive: bool = True,
+        max_iterations: int = 50,
+    ):
         self.heuristic = heuristic
         self.exhaustive = exhaustive
         self.max_iterations = max_iterations
@@ -85,28 +91,23 @@ class RandomRestartHillClimbing(SearchAlgorithm):
             return self.non_exhaustive_search(problem)
 
     def exhaustive_search(self, problem: Problem) -> Node:
-        state_factory = problem.state_factory
         hc = HillClimbing(self.heuristic)
 
         solution = hc.search(problem)
 
         while not solution.state.is_goal():
-            problem.initial_state = state_factory.random()
             solution = hc.search(problem)
 
         return solution
 
     def non_exhaustive_search(self, problem: Problem) -> Node:
-        initial_state = problem.initial_state
-        state_factory = problem.state_factory
         hc = HillClimbing(self.heuristic)
 
         solutions = [hc.search(problem)]
 
-        while not solutions[-1].state.is_goal() and len(solutions) < self.max_iterations:
-            problem.initial_state = state_factory.random()
+        while (
+            not solutions[-1].state.is_goal() and len(solutions) < self.max_iterations
+        ):
             solutions.append(hc.search(problem))
 
-        problem.initial_state = initial_state
         return max(solutions, key=(lambda n: self.heuristic(n)))
-
