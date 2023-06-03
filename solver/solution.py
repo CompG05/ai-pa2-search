@@ -26,7 +26,7 @@ final state: {self.final_state}
 final state value: {self.value}
 time: %.2f ms
 generated nodes: {self.nodes}
-max memory usage: {self.memory} bytes""" % self.time * 1000
+max memory usage: {self.memory} bytes""" % (self.time * 1000)
 
     @classmethod
     def csv_header(cls):
