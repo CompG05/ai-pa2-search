@@ -21,34 +21,33 @@ class StateFactory:
 
 
 class Action:
-    def __init__(self, cost=1):
+    def __init__(self, cost: float = 1):
         self.cost = cost
 
-    def execute(self, state) -> object:
+    def execute(self, state: State) -> State:
         raise NotImplementedError
 
-    def is_enabled(self, state) -> bool:
+    def is_enabled(self, state: State) -> bool:
         raise NotImplementedError
 
     def __hash__(self):
         raise NotImplementedError
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Action'):
         raise NotImplementedError
 
 
 class Problem:
     """Abstract class for a formal representation of a search problem"""
 
-    def __init__(self, initial):
-        self.initial_state = initial
+    def __init__(self):
         self.state_factory = StateFactory()
 
-    def is_goal(self, state) -> bool:
+    def is_goal(self, state: State) -> bool:
         return state.is_goal()
 
-    def result(self, state, action: Action) -> object:
+    def result(self, state: State, action: Action) -> State:
         return action.execute(state)
 
-    def enabled_actions(self, state) -> list[Action]:
+    def enabled_actions(self, state: State) -> list[Action]:
         raise NotImplementedError
