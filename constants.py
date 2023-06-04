@@ -1,4 +1,5 @@
 from algorithms.local.hill_climbing import *
+from algorithms.local.simulated_annealing import SimulatedAnnealing
 from problems.nqueens import NQueensProblem
 from problems.knapsack import KnapsackProblem
 
@@ -15,10 +16,13 @@ HILL_CLIMBING = "hill_climbing"
 HILL_CLIMBING_RANDOM_RESTART = "hill_climbing_random_restart"
 HILL_CLIMBING_SIDEWAYS = "hill_climbing_sideways"
 
+SIMULATED_ANNEALING = "simulated_annealing"
+
 algorithms = {
     HILL_CLIMBING: HillClimbing,
     HILL_CLIMBING_RANDOM_RESTART: RandomRestartHillClimbing,
     HILL_CLIMBING_SIDEWAYS: HillClimbingSideMovements,
+    SIMULATED_ANNEALING: SimulatedAnnealing,
 }
 
 # nqueens heuristic
