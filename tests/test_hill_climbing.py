@@ -12,23 +12,6 @@ h2 = KnapsackHeuristic().create(ACCUM_VALUE)
 hc_algorithms = [HillClimbing(h), HillClimbingSideMovements(h, 100), RandomRestartHillClimbing(h, exhaustive=True)]
 
 
-def test_hill_climbing_nqueens():
-    i = 100
-
-    state_factory = p.state_factory
-    states = [state_factory.random() for _ in range(i)]
-
-    for hc in hc_algorithms:
-        solved = 0
-        for state in states:
-            p.initial_state = state
-            result = hc.search(p)
-            solved += result.state.is_goal()
-
-        actual_solution_rate = solved / i
-        print(f"\n{hc.__class__.__name__} solution rate: {actual_solution_rate}")
-
-
 def test_random_restart_exhaustive_nqueens():
     algorithm = RandomRestartHillClimbing(h)
     solution = algorithm.search(p)
