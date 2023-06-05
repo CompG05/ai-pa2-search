@@ -10,9 +10,9 @@ from problems.nqueens import NQueensProblem
 def main():
     p = NQueensProblem(dimension=8)
 
-    initial_temperatures = [1]
-    cooling_rates = [0.005, 0.001]
-    min_temperatures = [0.00000000000000001]
+    initial_temperatures =   [1]   #[1]
+    cooling_rates =          [0.001]      #[0.005, 0.001]
+    min_temperatures =       [1e-05]   #[0.000001]
 
     n_conflicts = NQueensHeuristic().create(N_CONFLICTS)
     sim_annealing = SimulatedAnnealing(n_conflicts)
@@ -26,7 +26,8 @@ def main():
                 solutions = 0
                 steps = []
                 times = []
-                for _ in range(iterations):
+                for i in range(iterations):
+                    print("Voy por:", i)
                     bef_time = time.time()
                     solution_node = sim_annealing.search(p)
                     solutions += solution_node.state.is_goal()

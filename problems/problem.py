@@ -1,3 +1,6 @@
+from typing import Iterable
+
+
 class State:
     def __init__(self, data):
         self.data = data
@@ -50,4 +53,8 @@ class Problem:
         return action.execute(state)
 
     def enabled_actions(self, state: State) -> list[Action]:
+        raise NotImplementedError
+
+    @staticmethod
+    def state_from_list(lst: list) -> State:
         raise NotImplementedError

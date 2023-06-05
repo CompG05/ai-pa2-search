@@ -28,4 +28,6 @@ class GeneticSearch(SearchAlgorithm):
         self.ga_instance = pygad.GA(**kwargs)
 
     def search(self, problem: Problem) -> Node:
-        return super().search(problem)
+        self.ga_instance.run()
+        solution, solution_fitness, solution_idx = self.ga_instance.best_solution()
+        return Node(problem.state_from_list(solution))

@@ -91,3 +91,7 @@ class NQueensProblem(Problem):
             for new_row in range(state.dimension)
             if new_row != state.data[column]
         ]
+
+    @staticmethod
+    def state_from_list(lst: list) -> NQueensState:
+        return NQueensState(tuple(lst))
