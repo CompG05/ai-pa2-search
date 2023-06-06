@@ -1,6 +1,5 @@
 from algorithms.local.hill_climbing import *
 from algorithms.local.simulated_annealing import SimulatedAnnealing
-from heuristics.nqueens import inverse_n_conflicts_fitness
 from problems.nqueens import NQueensProblem
 from problems.knapsack import KnapsackProblem
 
@@ -37,6 +36,6 @@ heuristics = {
     KNAPSACK: [ACCUM_VALUE],
 }
 
-fitness = {
-    INVERSE_N_CONFLICTS: inverse_n_conflicts_fitness
-}
+from heuristics.nqueens import inverse_n_conflicts_fitness
+
+fitness = {INVERSE_N_CONFLICTS: inverse_n_conflicts_fitness}

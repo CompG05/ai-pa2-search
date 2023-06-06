@@ -8,6 +8,8 @@ class KnapsackHeuristic:
     def create(self, heuristic: str) -> Callable[[Node], float]:
         if heuristic.lower() == ACCUM_VALUE:
             return self.accumulated_value
+        else:
+            raise ValueError(f"Heuristic not found: {heuristic}")
 
     @staticmethod
     def accumulated_value(node: Node) -> float:
