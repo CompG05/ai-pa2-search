@@ -2,7 +2,6 @@ from algorithms.local.hill_climbing import HillClimbingSideMovements, HillClimbi
 from constants import *
 from heuristics.knapsack import KnapsackHeuristic
 from heuristics.nqueens import NQueensHeuristic
-from problems.knapsack import KnapsackProblem
 from problems.nqueens import NQueensProblem
 
 p = NQueensProblem(dimension=8)
@@ -16,12 +15,3 @@ def test_random_restart_exhaustive_nqueens():
     algorithm = RandomRestartHillClimbing(h)
     solution = algorithm.search(p)
     assert solution.state.is_goal()
-
-
-def test_random_restart_non_exhaustive_knapsack():
-    weights = [5, 10, 30, 15, 40, 25, 65]
-    values = [1, 2, 7, 3, 9, 6, 10]
-    cap = 75
-    algorithm = RandomRestartHillClimbing(h2, False, 10)
-    problem = KnapsackProblem(set(), weights, values, cap)
-    print("\n", algorithm.search(problem).state)

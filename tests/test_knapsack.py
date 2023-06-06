@@ -1,22 +1,25 @@
 import pytest
 
-from problems.knapsack import PutIn, KnapsackState, KnapsackProblem
+from problems.knapsack import Switch, KnapsackState, KnapsackProblem
 
-#          0   1   2   3   4   5   6
-weights = [5, 10, 30, 15, 40, 25, 50]
-values =  [1,  2,  7,  3,  9,  6, 12]
-cap = 75
+#                       0   1   2   3   4   5   6
+weights: list[float] = [5, 10, 30, 15, 40, 25, 50]
+values: list[float] =  [1,  2,  7,  3,  9,  6, 12]
+cap = 75.0
 
 
 def s(content):
-    return KnapsackState(content, weights, values, cap)
+    c = [False] * len(weights)
+    for i in content:
+        c[i] = True
+    return KnapsackState(c, weights, values, cap)
 
 
 action_is_enabled_config = [
-    (PutIn(1), s({6, 5}), False),
-    (PutIn(2), s({6}), False),
-    (PutIn(6), s({1, 3}), True),
-    (PutIn(2), s({1, 2, 3}), False)
+    (Switch(1), s([6, 3]), True),
+    (Switch(2), s([1, 2, 3]), True),
+    (Switch(-1), s([6, 3]), False),
+    (Switch(7), s([6, 3]), False),
 ]
 
 
@@ -26,8 +29,10 @@ def test_action_is_enabled(action, state, expected):
 
 
 execute_action_config = [
-    (PutIn(6), s({1, 3}), s({1, 3, 6})),
-    (PutIn(1), s({2, 4}), s({1, 2, 4}))
+    (Switch(6), s([1, 3]), s([1, 3, 6])),
+    (Switch(6), s([1, 3, 6]), s([1, 3])),
+    (Switch(1), s([2, 4]), s([1, 2, 4])),
+    (Switch(1), s([1, 2, 4]), s([2, 4])),
 ]
 
 
@@ -36,17 +41,7 @@ def test_action_execute(action, state, expected):
     assert action.execute(state) == expected
 
 
-enabled_actions_config = [
-    (s({6, 5}), [PutIn(i) for i in []]),
-    (s({6}), [PutIn(i) for i in [0, 1, 3, 5]]),
-    (s({1, 3}), [PutIn(i) for i in [0, 2, 4, 5, 6]]),
-    (s({1, 2, 3}), [PutIn(i) for i in [0]]),
-    (s({}), [PutIn(i) for i in [0, 1, 2, 3, 4, 5, 6]]),
-]
+def test_enabled_actions():
+    problem = KnapsackProblem([False] * len(weights), weights, values, cap)
 
-
-@pytest.mark.parametrize("state, expected", enabled_actions_config)
-def test_enabled_actions(state, expected):
-    problem = KnapsackProblem(set(), weights, values, cap)
-
-    assert problem.enabled_actions(state) == expected
+    assert problem.enabled_actions(s([1, 3])) == [Switch(i) for i in [0, 1, 2, 3, 4, 5, 6]]
