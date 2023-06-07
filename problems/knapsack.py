@@ -87,7 +87,6 @@ class KnapsackStateFactory(StateFactory):
                 cum_weight += self.weights[item]
             item = items.pop()
 
-        content.sort()
         return KnapsackState(content, self.weights, self.values, self.sack_cap)
 
 
@@ -148,5 +147,5 @@ class KnapsackProblem(Problem):
     def is_goal(self, _) -> bool:
         return False
 
-    def enabled_actions(self, _: KnapsackState) -> list[Switch]:
-        return self.actions
+    def enabled_actions(self, s: KnapsackState) -> list[Switch]:
+        return [action for action in self.actions if action.is_enabled(s)]
