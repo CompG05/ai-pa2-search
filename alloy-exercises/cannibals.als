@@ -9,7 +9,7 @@ sig State {
   l_cannibals: Int,
   r_missionaries: Int,
   r_cannibals: Int,
-  boat: 0+1,
+  boat: Side,
   next: State+Null,
 }
 
@@ -19,7 +19,7 @@ fact valid_state {
     0 <= s.r_missionaries and 0 <= s.r_cannibals and
     (s.l_missionaries >= s.l_cannibals or s.l_missionaries = 0) and
     (s.r_missionaries >= s.r_cannibals or s.r_missionaries = 0) and
-    (s.boat in 0+1)
+    (s.boat in Side)
   )
 }
 
@@ -32,22 +32,22 @@ fun left_missionaries_diff[s1, s2: State]: Int { sub[s1.l_missionaries, s2.l_mis
 fun left_cannibals_diff[s1, s2: State]: Int { sub[s1.l_cannibals, s2.l_cannibals] }
 
 
-pred same_population[s1, s2: State] {
-  add[s1.l_missionaries, s1.r_missionaries] = add[s2.l_missionaries, s2.r_missionaries] and
-  add[s1.l_cannibals, s1.r_cannibals] = add[s2.l_cannibals, s2.r_cannibals]
-}
+ pred same_population[s1, s2: State] {
+   add[s1.l_missionaries, s1.r_missionaries] = add[s2.l_missionaries, s2.r_missionaries] and
+   add[s1.l_cannibals, s1.r_cannibals] = add[s2.l_cannibals, s2.r_cannibals]
+ }
 
 fact valid_transition {
   all s: State | (
     s.next in State implies (
       s.boat != s.next.boat and
       same_population[s, s.next] and
-      (s.boat = 0 implies (
+      (s.boat = Left implies (
         left_diff[s, s.next] in 1+2 and
         left_missionaries_diff[s, s.next] in 0+1+2 and
         left_cannibals_diff[s, s.next] in 0+1+2
       )) and
-      (s.boat = 1 implies (
+      (s.boat = Right implies (
         left_diff[s.next, s] in 1+2 and
         left_missionaries_diff[s.next, s] in 0+1+2 and
         left_cannibals_diff[s.next, s] in 0+1+2
@@ -56,7 +56,13 @@ fact valid_transition {
   )
 }
 
-one sig InitialState extends State {}
+one sig InitialState extends State {} {
+  l_missionaries = 3
+  l_cannibals = 3
+  r_missionaries = 0
+  r_cannibals = 0
+  boat = Left
+}
 
 fact valid_initial {
   all s: State | s in InitialState.*next
@@ -67,16 +73,10 @@ one sig FinalState extends State {}
 fact valid_final {
   FinalState.l_missionaries = 0 and
   FinalState.l_cannibals = 0 and
-  FinalState.r_missionaries = 2 and
-  FinalState.r_cannibals = 2 and
-  FinalState.boat = 1 and
+  FinalState.r_missionaries = add[InitialState.l_missionaries, InitialState.r_missionaries] and
+  FinalState.r_cannibals = add[InitialState.l_cannibals, InitialState.r_cannibals] and
+  FinalState.boat = Right and
   FinalState.next = Null
 }
 
-run {
-  InitialState.l_missionaries = 2 and
-  InitialState.l_cannibals = 2 and
-  InitialState.r_missionaries = 0 and
-  InitialState.r_cannibals = 0 and
-  InitialState.boat = 0
-}
+run {} for 12 State
