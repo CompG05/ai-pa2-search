@@ -23,7 +23,7 @@ def main():
 
     color_map = get_graph_coloring_model(romania_map, 3)
     if color_map != False:
-        write_colored_graph_dot("colored_romania.dot", romania_map, ["red", "blue", "green"], color_map)
+        write_colored_graph_dot("../colored_romania.dot", romania_map, ["red", "blue", "green"], color_map)
 
     print(color_map)
 
