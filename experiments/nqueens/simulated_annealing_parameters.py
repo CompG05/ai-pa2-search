@@ -10,22 +10,24 @@ from problems.nqueens import NQueensProblem
 def main():
     p = NQueensProblem(dimension=8)
 
-    initial_temperatures =   [1]   #[1]
-    cooling_rates =          [0.001]      #[0.005, 0.001]
-    min_temperatures =       [1e-05]   #[0.000001]
+    initial_temperatures = [1]  # [1]
+    cooling_rates = [0.001]  # [0.005, 0.001]
+    limits = [4500]  # [0.000001]
 
     n_conflicts = NQueensHeuristic().create(N_CONFLICTS)
     sim_annealing = SimulatedAnnealing(n_conflicts)
-    iterations = 75
+    iterations = 1
     _, ax = plt.subplots()
 
-    for min_temp in min_temperatures:
+    for min_temp in limits:
         for init_temp in initial_temperatures:
             for cooling_rate in cooling_rates:
                 sim_annealing.set_schedule(init_temp, cooling_rate, min_temp)
                 solutions = 0
                 steps = []
                 times = []
+                values = []
+                l = None
                 for i in range(iterations):
                     print("Voy por:", i)
                     bef_time = time.time()
@@ -34,6 +36,10 @@ def main():
                     aft_time = time.time()
                     steps.append(len(solution_node.path()))
                     times.append(aft_time - bef_time)
+                    values = [n_conflicts(n) for n in solution_node.path()]
+                    l = len(solution_node.path())
+                plt.plot(list(range(l)), values)
+                plt.show()
                 solution_rate = solutions / iterations
                 mean_steps = sum(steps) / len(steps)
                 mean_time = sum(times) / len(times)
