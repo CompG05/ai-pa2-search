@@ -17,6 +17,12 @@ HILL_CLIMBING_SIDEWAYS = "hill_climbing_sideways"
 
 SIMULATED_ANNEALING = "simulated_annealing"
 
+hill_climbing_algorithms = {
+    HILL_CLIMBING: HillClimbing,
+    HILL_CLIMBING_RANDOM_RESTART: RandomRestartHillClimbing,
+    HILL_CLIMBING_SIDEWAYS: HillClimbingSideMovements,
+}
+
 algorithms = {
     HILL_CLIMBING: HillClimbing,
     HILL_CLIMBING_RANDOM_RESTART: RandomRestartHillClimbing,
