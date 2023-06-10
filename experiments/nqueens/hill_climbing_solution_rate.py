@@ -1,30 +1,29 @@
 import sys
 
-from constants import algorithms, NQUEENS, INVERSE_N_CONFLICTS
-from problems.nqueens import NQueensProblem
+from constants import NQUEENS, INVERSE_N_CONFLICTS, hill_climbing_algorithms
 from solver.solver import Solver
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python hill_climbing_solution_rate.py <iterations>")
+    if len(sys.argv) != 3:
+        print("Usage: python hill_climbing_solution_rate.py <dimension> <iterations>")
         exit(1)
 
-    iterations = int(sys.argv[1])
-    p = NQueensProblem(dimension=8)
+    dimension = int(sys.argv[1])
+    iterations = int(sys.argv[2])
 
-    for algorithm in algorithms:
+    for algorithm in hill_climbing_algorithms:
         solver = Solver(
             NQUEENS,
             algorithm,
             INVERSE_N_CONFLICTS,
-            problem_kwargs={"dimension": 8},
-            algorithm_kwargs={"max_sideways_moves": 100})
+            problem_kwargs={"dimension": dimension},
+            algorithm_kwargs={"max_sideways_moves": 100, "exhaustive": True})
         solved = 0
 
         for _ in range(iterations):
             solution = solver.solve()
-            solved += p.is_goal(solution.final_state)
+            solved += solution.final_state.is_goal()
 
         solution_rate = solved / iterations
         print(f"\n{algorithm} solution rate: {solution_rate}")
