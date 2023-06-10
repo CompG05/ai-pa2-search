@@ -67,6 +67,9 @@ def graph_to_expr(g: Graph, k: int):
 
 def get_graph_coloring_model(g: Graph, k: int) -> dict[str, int] | Literal[False]:
     """Returns a model for a graph coloring problem with k colors as a dict[vertex, color]"""
+    if k > len(g.nodes()):
+        raise ValueError(f"Cannot color graph with {k} colors: graph has only {len(g.nodes())} nodes")
+
     e = graph_to_expr(g, k)
     model = dpll_satisfiable(e)
     if model == False:
@@ -87,6 +90,9 @@ def write_colored_graph_dot(path: str, g: Graph, colors: list[str], color_map: d
     graph = pydot.Dot(graph_type="graph")
 
     for n in g.nodes():
+        if color_map[n] not in range(len(colors)):
+            raise ValueError(f"Not enough colors: index {color_map[n]} not in range {len(colors)}")
+
         graph.add_node(pydot.Node(n, color=colors[color_map[n]]))
 
     for n in g.nodes():

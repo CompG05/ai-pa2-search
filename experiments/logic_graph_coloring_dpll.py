@@ -9,9 +9,9 @@ def main():
         C=dict(F=0),
         D=dict(F=0)))
 
-    color_map = get_graph_coloring_model(graph, 2)
+    color_map = get_graph_coloring_model(graph, 3)
     if color_map != False:
-        write_colored_graph_dot("gr.dot", graph, ["red", "blue"], color_map)
+        write_colored_graph_dot("gr.dot", graph, ["red", "blue", "cyan"], color_map)
 
     print(color_map)
 
