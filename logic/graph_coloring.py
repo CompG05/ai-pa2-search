@@ -1,3 +1,4 @@
+import pydot
 from typing import Iterable, Literal
 
 from aima.logic import dpll_satisfiable
@@ -79,3 +80,20 @@ def get_graph_coloring_model(g: Graph, k: int) -> dict[str, int] | Literal[False
                 result[v] = c
 
     return result
+
+
+def write_colored_graph_dot(path: str, g: Graph, colors: list[str], color_map: dict[str, int]):
+    """Write a colored graph to a dot file in graphviz format"""
+    graph = pydot.Dot(graph_type="graph")
+
+    for n in g.nodes():
+        graph.add_node(pydot.Node(n, color=colors[color_map[n]]))
+
+    for n in g.nodes():
+        for adj in g.get(n).keys():
+            if n < adj:
+                graph.add_edge(pydot.Edge(n, adj))
+        if n in g.get(n).keys():
+            graph.add_edge(pydot.Edge(n, n))
+
+    graph.write(path)
