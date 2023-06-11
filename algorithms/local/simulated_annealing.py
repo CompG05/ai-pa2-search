@@ -13,11 +13,9 @@ class SimulatedAnnealing(SearchAlgorithm):
         super().__init__()
         self.heuristic = heuristic
         self.schedule = schedule
-        self.limit = None
 
     def set_schedule(self, k, lam, limit):
-        self.schedule = lambda t: k * np.exp(-lam * t)
-        self.limit = limit
+        self.schedule = exp_schedule(k, lam, limit)
 
     def search(self, problem: Problem) -> Node:
         if self.schedule is None:
@@ -27,7 +25,7 @@ class SimulatedAnnealing(SearchAlgorithm):
         t = 1
         while True:
             T = self.schedule(t)
-            if t == self.limit:
+            if T == 0:
                 return current
 
             neighbors = current.expand(problem)
@@ -36,9 +34,13 @@ class SimulatedAnnealing(SearchAlgorithm):
                 return current.state
 
             succ = random.choice(neighbors)
-            delta_e = self.heuristic(current) - self.heuristic(succ)
+            delta_e = self.heuristic(succ) - self.heuristic(current)
 
-            if delta_e > 0 or random.random() < math.e ** (delta_e/T):
+            if delta_e > 0 or random.random() < math.e ** (delta_e / T):
                 current = succ
 
             t += 1
+
+
+def exp_schedule(k, lam, limit):
+    return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
