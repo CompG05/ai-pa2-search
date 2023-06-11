@@ -7,8 +7,13 @@ class ProblemFactory:
     def create(self, problem: str, **kwargs):
         if problem.lower() == NQUEENS:
             return NQueensProblem(kwargs.get("dimension")), NQueensHeuristic()
+
         if problem.lower() == KNAPSACK:
-            return KnapsackProblem(kwargs.get("content"), kwargs.get("weights"), kwargs.get("value")), KnapsackHeuristic()
+            if "path" in kwargs:
+                return KnapsackProblem.from_file(kwargs.get("path")), KnapsackHeuristic()
+            return KnapsackProblem(kwargs.get("content"), kwargs.get("weights"),
+                                   kwargs.get("values"), kwargs.get("sack_cap")), KnapsackHeuristic()
+
         else:
             raise ValueError("Problem not found")
 
