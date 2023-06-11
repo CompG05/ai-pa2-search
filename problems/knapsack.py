@@ -149,3 +149,23 @@ class KnapsackProblem(Problem):
 
     def enabled_actions(self, s: KnapsackState) -> list[Switch]:
         return [action for action in self.actions if action.is_enabled(s)]
+
+    @classmethod
+    def from_file(cls, path: str) -> 'KnapsackProblem':
+        with open(path, "r") as f:
+            lines = f.readlines()
+
+        n_items_s, cap_s = lines[0].split(' ')
+        n_items = int(n_items_s)
+        cap = float(cap_s)
+        weights = []
+        values = []
+
+        for i in range(1, n_items + 1):
+            value_s, weight_s = lines[i].split(' ')
+            weight = float(weight_s)
+            value = float(value_s)
+            weights.append(weight)
+            values.append(value)
+
+        return KnapsackProblem([False] * n_items, weights, values, cap)
