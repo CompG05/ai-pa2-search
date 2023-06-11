@@ -12,6 +12,8 @@ class AlgorithmFactory:
         elif algorithm.lower() == HILL_CLIMBING_RANDOM_RESTART:
             return algorithms[algorithm](heuristic, kwargs.get("exhaustive"),
                                          kwargs.get("max_iterations"))
+        elif algorithm.lower() == SIMULATED_ANNEALING:
+            return algorithms[algorithm](heuristic, kwargs.get("schedule"))
         else:
             raise ValueError(f"Algorithm {algorithm} not found")
 
