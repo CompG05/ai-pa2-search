@@ -22,6 +22,7 @@ class SimulatedAnnealing(SearchAlgorithm):
             raise Exception("Schedule not set")
 
         current = Node(problem.state_factory.random())
+        best = current
         t = 1
         while True:
             T = self.schedule(t)
@@ -31,13 +32,15 @@ class SimulatedAnnealing(SearchAlgorithm):
             neighbors = current.expand(problem)
 
             if not neighbors:
-                return current.state
+                return best.state
 
             succ = random.choice(neighbors)
             delta_e = self.heuristic(succ) - self.heuristic(current)
 
             if delta_e > 0 or random.random() < math.e ** (delta_e / T):
                 current = succ
+                if self.heuristic(succ) > self.heuristic(best):
+                    best = succ
 
             t += 1
 
