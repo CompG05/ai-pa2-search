@@ -133,10 +133,10 @@ class KnapsackProblem(Problem):
         values: list[float],
         sack_cap: float,
     ):
-        super().__init__()
         state = KnapsackState(content, weights, values, sack_cap)
         if not state.is_valid():
             raise ValueError("Lists sizes don't match")
+        super().__init__(initial_state=state)
 
         self.weight = weights
         self.value = values

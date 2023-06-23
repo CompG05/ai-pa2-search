@@ -1,3 +1,4 @@
+
 import random
 from typing import Optional
 
@@ -79,8 +80,10 @@ class NQueensAction(Action):
 
 class NQueensProblem(Problem):
     def __init__(self, dimension: int, initial: Optional[tuple] = None):
-        super().__init__()
-        self.initial_state = initial
+        if initial:
+            super().__init__(initial_state=NQueensState(initial))
+        else:
+            super().__init__()
         self.dimension = dimension
         self.state_factory = NQueensStateFactory(self.dimension)
 

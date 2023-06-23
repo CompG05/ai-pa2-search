@@ -43,8 +43,12 @@ class Action:
 class Problem:
     """Abstract class for a formal representation of a search problem"""
 
-    def __init__(self):
+    def __init__(self, initial_state=None):
+        self.initial_state = initial_state
         self.state_factory = StateFactory()
+
+    def restart_initial(self):
+        self.initial_state = self.state_factory.random()
 
     def is_goal(self, state: State) -> bool:
         return state.is_goal()
