@@ -15,9 +15,9 @@ class Node:
 
     def expand(self, problem: Problem) -> list['Node']:
         enabled_actions = problem.enabled_actions(self.state)
-        total_nodes = self.accum_nodes + len(enabled_actions)
+        self.accum_nodes += len(enabled_actions)
 
-        return [Node(problem.result(self.state, action), accum_nodes=total_nodes, parent=self)
+        return [Node(problem.result(self.state, action), accum_nodes=self.accum_nodes, parent=self)
                 for action in enabled_actions]
 
     def in_path(self, state) -> bool:

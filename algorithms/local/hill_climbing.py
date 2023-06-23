@@ -2,6 +2,8 @@ import random
 import sys
 from typing import Callable
 
+import PIL.Image
+
 from algorithms.search_algorithm import SearchAlgorithm, Node
 from problems.problem import Problem, State
 
@@ -96,13 +98,15 @@ class RandomRestartHillClimbing(SearchAlgorithm):
 
     def exhaustive_search(self, problem: Problem) -> Node:
         hc = HillClimbing(self.heuristic)
-
         solution = hc.search(problem)
+        nodes = solution.accum_nodes
 
         while not solution.state.is_goal():
             hc = HillClimbing(self.heuristic, problem.state_factory.random())
             solution = hc.search(problem)
+            nodes += solution.accum_nodes
 
+        solution.accum_nodes = nodes
         return solution
 
     def non_exhaustive_search(self, problem: Problem) -> Node:
@@ -115,4 +119,6 @@ class RandomRestartHillClimbing(SearchAlgorithm):
             hc = HillClimbing(self.heuristic, problem.state_factory.random())
             solutions.append(hc.search(problem))
 
-        return max(solutions, key=(lambda n: self.heuristic(n)))
+        solution = max(solutions, key=(lambda n: self.heuristic(n)))
+        solution.accum_nodes = sum([s.accum_nodes for s in solutions])
+        return solution
