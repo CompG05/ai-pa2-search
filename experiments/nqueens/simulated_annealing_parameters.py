@@ -2,7 +2,7 @@ import time
 import matplotlib.pyplot as plt
 
 from algorithms.local.simulated_annealing import SimulatedAnnealing
-from constants import N_CONFLICTS
+from constants import INVERSE_N_CONFLICTS
 from heuristics.nqueens import NQueensHeuristic
 from problems.nqueens import NQueensProblem
 
@@ -14,7 +14,7 @@ def main():
     cooling_rates = [0.001]  # [0.005, 0.001]
     limits = [4500]  # [0.000001]
 
-    n_conflicts = NQueensHeuristic().create(N_CONFLICTS)
+    n_conflicts = NQueensHeuristic().create(INVERSE_N_CONFLICTS)
     sim_annealing = SimulatedAnnealing(n_conflicts)
     iterations = 1
     _, ax = plt.subplots()
@@ -45,8 +45,6 @@ def main():
                 mean_time = sum(times) / len(times)
                 print(f"\nit: {init_temp}, cr: {cooling_rate}, mt: {min_temp}, solution rate: {solution_rate}, mean "
                       f"steps: {mean_steps}, mean time: %.4f" % mean_time)
-
-
 
 
 if __name__ == "__main__":
