@@ -36,6 +36,7 @@ INVERSE_N_CONFLICTS = "inverse_n_conflicts"
 
 # knapsack heuristic
 ACCUM_VALUE = "accumulated_value"
+ACCUM_RATING = "accumulated_rating"
 
 heuristics = {
     NQUEENS: [N_CONFLICTS],

@@ -10,7 +10,7 @@ class ProblemFactory:
 
         if problem.lower() == KNAPSACK:
             if "path" in kwargs:
-                return KnapsackProblem.from_file(kwargs.get("path")), KnapsackHeuristic()
+                return KnapsackProblem.from_file(kwargs.get("path"), kwargs.get("content")), KnapsackHeuristic()
             return KnapsackProblem(kwargs.get("content"), kwargs.get("weights"),
                                    kwargs.get("values"), kwargs.get("sack_cap")), KnapsackHeuristic()
 

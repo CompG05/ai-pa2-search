@@ -34,6 +34,13 @@ class KnapsackState(State):
         return v
 
     @property
+    def sack_rating(self) -> float:
+        r = 0
+        for i in range(len(self.data)):
+            r += (self.value[i] / self.weight[i]) if self.data[i] else 0
+        return r
+
+    @property
     def n_items(self) -> int:
         return len(self.data)
 
@@ -128,20 +135,25 @@ class Switch(Action):
 class KnapsackProblem(Problem):
     def __init__(
         self,
-        content: list[bool],
         weights: list[float],
         values: list[float],
         sack_cap: float,
+        content: list[bool] = None,
     ):
-        state = KnapsackState(content, weights, values, sack_cap)
-        if not state.is_valid():
+
+        state = KnapsackState(content, weights, values, sack_cap) if content else None
+
+        if not content and len(weights) != len(values):
             raise ValueError("Lists sizes don't match")
+        if content and not state.is_valid():
+                raise ValueError("Content is not valid or lists sizes don't match")
+
         super().__init__(initial_state=state)
 
         self.weight = weights
         self.value = values
         self.sack_cap = sack_cap
-        self.actions = [Switch(i) for i in range(len(content))]
+        self.actions = [Switch(i) for i in range(len(values))]
         self.state_factory = KnapsackStateFactory(weights, values, sack_cap)
 
     def is_goal(self, _) -> bool:
@@ -151,7 +163,7 @@ class KnapsackProblem(Problem):
         return [action for action in self.actions if action.is_enabled(s)]
 
     @classmethod
-    def from_file(cls, path: str) -> 'KnapsackProblem':
+    def from_file(cls, path: str, content=None) -> 'KnapsackProblem':
         with open(path, "r") as f:
             lines = f.readlines()
 
@@ -168,4 +180,4 @@ class KnapsackProblem(Problem):
             weights.append(weight)
             values.append(value)
 
-        return KnapsackProblem([False] * n_items, weights, values, cap)
+        return KnapsackProblem(weights, values, cap, content)
