@@ -65,6 +65,9 @@ class KnapsackState(State):
 
         return f"Knapsack{s}"
 
+    def to_csv(self) -> str:
+        return ','.join(map(str, map(int, self.data)))
+
     def __hash__(self):
         return hash((self.data, self.weight, self.value, self.sack_cap))
 

@@ -17,6 +17,9 @@ class State:
     def __hash__(self):
         return hash(self.data)
 
+    def to_csv(self) -> str:
+        raise NotImplementedError
+
 
 class StateFactory:
     def random(self):

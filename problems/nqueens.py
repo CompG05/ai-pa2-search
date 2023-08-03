@@ -1,4 +1,3 @@
-
 import random
 from typing import Optional
 
@@ -40,6 +39,9 @@ class NQueensState(State):
 
     def __repr__(self):
         return str(self.data)
+
+    def to_csv(self) -> str:
+        return ','.join(map(str, self.data))
 
 
 class NQueensStateFactory(StateFactory):
