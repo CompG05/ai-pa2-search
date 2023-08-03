@@ -6,7 +6,7 @@ from heuristics.nqueens import NQueensHeuristic
 class ProblemFactory:
     def create(self, problem: str, **kwargs):
         if problem.lower() == NQUEENS:
-            return NQueensProblem(kwargs.get("dimension")), NQueensHeuristic()
+            return NQueensProblem(kwargs.get("dimension"), kwargs.get("initial_state")), NQueensHeuristic()
 
         if problem.lower() == KNAPSACK:
             if "path" in kwargs:
