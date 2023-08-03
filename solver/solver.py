@@ -1,4 +1,5 @@
 import time
+import tracemalloc as tm
 from typing import Optional
 
 from factories.algorithm_factory import algorithm_factory
@@ -21,8 +22,12 @@ class Solver:
 
     def solve(self) -> Solution:
         bef_time = time.time()
+        tm.start()
         node = self.algorithm.search(self.problem)
+        tm.take_snapshot()
+        memory_peak = tm.get_traced_memory()[1]
         aft_time = time.time()
+        tm.stop()
         node_value = self.heuristic(node) if self.heuristic else 0
 
         return Solution(
@@ -33,5 +38,5 @@ class Solver:
             problem_kwargs=self.problem_kwargs or {},
             algorithm_kwargs=self.algorithm_kwargs or {},
             dtime=aft_time - bef_time,
-            memory_peak=0,
+            memory_peak=memory_peak,
         )
