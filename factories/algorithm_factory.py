@@ -11,7 +11,7 @@ class AlgorithmFactory:
             return algorithms[algorithm](heuristic, kwargs.get("max_sideways_moves"))
         elif algorithm.lower() == HILL_CLIMBING_RANDOM_RESTART:
             return algorithms[algorithm](heuristic, kwargs.get("exhaustive"),
-                                         kwargs.get("max_iterations"))
+                                         kwargs.get("time_limit"))
         elif algorithm.lower() == SIMULATED_ANNEALING:
             return algorithms[algorithm](heuristic, kwargs.get("schedule"))
         else:

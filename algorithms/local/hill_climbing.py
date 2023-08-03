@@ -1,6 +1,7 @@
 import random
 import sys
 from typing import Callable
+import time
 
 import PIL.Image
 
@@ -83,11 +84,11 @@ class RandomRestartHillClimbing(SearchAlgorithm):
         self,
         heuristic: Callable[[Node], float],
         exhaustive: bool = True,
-        max_iterations: int = 50,
+        time_limit: float = 60,
     ):
         self.heuristic = heuristic
         self.exhaustive = exhaustive
-        self.max_iterations = max_iterations
+        self.time_limit = time_limit
         super().__init__()
 
     def search(self, problem: Problem) -> Node:
@@ -113,8 +114,9 @@ class RandomRestartHillClimbing(SearchAlgorithm):
         hc = HillClimbing(self.heuristic)
         solutions = [hc.search(problem)]
 
+        t = time.time()
         while (
-            not solutions[-1].state.is_goal() and len(solutions) < self.max_iterations
+            not solutions[-1].state.is_goal() and time.time() - t < self.time_limit
         ):
             hc = HillClimbing(self.heuristic, problem.state_factory.random())
             solutions.append(hc.search(problem))
