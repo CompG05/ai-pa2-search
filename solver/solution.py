@@ -18,8 +18,8 @@ class Solution:
         self.value = value
 
     @classmethod
-    def not_found(cls, algorithm_name: str, heuristic_name: Optional[str]):
-        return Solution(null_node, 0, algorithm_name, heuristic_name, {}, {}, 0, 0)
+    def not_found(cls, algorithm_name: str, heuristic_name: Optional[str], problem_kwargs, algorithm_kwargs):
+        return Solution(null_node, 0, algorithm_name, heuristic_name, problem_kwargs, algorithm_kwargs, 0, 0)
 
     def __str__(self):
         return f"""
