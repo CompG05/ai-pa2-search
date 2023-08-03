@@ -39,7 +39,7 @@ ACCUM_VALUE = "accumulated_value"
 ACCUM_RATING = "accumulated_rating"
 
 heuristics = {
-    NQUEENS: [N_CONFLICTS],
+    NQUEENS: [INVERSE_N_CONFLICTS, N_CONFLICTS],
     KNAPSACK: [ACCUM_VALUE],
 }
 
