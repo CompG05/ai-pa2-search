@@ -61,7 +61,7 @@ $solve nqueens hill_climbing_sideways \
 $solve nqueens hill_climbing_random_restart \
 -i ${states_dir}/thirtytwoqueens.csv -o ${thirty_two_queens_solution_dir}/hill_climbing_random_restart_exhaustive.csv \
 -pa '{"dimension": 32}' \
--aa '{"exhaustive": 1}'
+-aa '{"exhaustive": 0, "time_limit": 60}'
 
 
 # Knapsack
@@ -81,4 +81,4 @@ $solve knapsack hill_climbing_sideways \
 $solve knapsack hill_climbing_random_restart \
 -i ${states_dir}/knapsack_easy_10_269.csv -o ${knapsack_solution_dir}/easy_10_269/hill_climbing_random_restart.csv \
 -pa '{"path": "experiments/knapskack/instances/easy/f1_l-d_kp_10_269"}' \
--aa '{"exhaustive": 0, "time_limit": 10}'
+-aa '{"exhaustive": 0, "time_limit": 2}'
