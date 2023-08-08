@@ -37,4 +37,4 @@ max memory usage: {self.memory} bytes""" % (self.time * 1000)
         return "algorithm,heuristic,algorithm args,final state,value,time,generated nodes,max memory usage"
 
     def to_csv(self):
-        return f"{self.algorithm_name},{self.heuristic_name},{self.algorithm_kwargs},{self.final_state},{self.value},{self.time},{self.nodes},{self.memory}"
+        return f"{self.algorithm_name},{self.heuristic_name},\"{self.algorithm_kwargs}\",\"{self.final_state}\",{self.value},{self.time},{self.nodes},{self.memory}"
