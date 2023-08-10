@@ -66,6 +66,7 @@ $solve nqueens hill_climbing_random_restart \
 
 # Knapsack
 
+
 knapsack_solution_dir="${solution_dir}/knapsack"
 mkdir -p ${knapsack_solution_dir}/easy_10_269
 
@@ -82,3 +83,83 @@ $solve knapsack hill_climbing_random_restart \
 -i ${states_dir}/knapsack_easy_10_269.csv -o ${knapsack_solution_dir}/easy_10_269/hill_climbing_random_restart.csv \
 -pa '{"path": "experiments/knapskack/instances/easy/f1_l-d_kp_10_269"}' \
 -aa '{"exhaustive": 0, "time_limit": 2}'
+
+mkdir -p ${knapsack_solution_dir}/easy_10_60
+
+$solve knapsack hill_climbing \
+-i ${states_dir}/knapsack_easy_10_60.csv -o ${knapsack_solution_dir}/easy_10_60/hill_climbing.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f6_l-d_kp_10_60"}'
+
+$solve knapsack hill_climbing_sideways \
+-i ${states_dir}/knapsack_easy_10_60.csv -o ${knapsack_solution_dir}/easy_10_60/hill_climbing_sideways_25.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f6_l-d_kp_10_60"}' \
+-aa '{"max_sideways_moves": 25}'
+
+$solve knapsack hill_climbing_random_restart \
+-i ${states_dir}/knapsack_easy_10_60.csv -o ${knapsack_solution_dir}/easy_10_60/hill_climbing_random_restart.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f6_l-d_kp_10_60"}' \
+-aa '{"exhaustive": 0, "time_limit": 2}'
+
+mkdir -p ${knapsack_solution_dir}/easy_20_879
+
+$solve knapsack hill_climbing \
+-i ${states_dir}/knapsack_easy_20_879.csv -o ${knapsack_solution_dir}/easy_20_879/hill_climbing.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f10_l-d_kp_20_879"}'
+
+$solve knapsack hill_climbing_sideways \
+-i ${states_dir}/knapsack_easy_20_879.csv -o ${knapsack_solution_dir}/easy_20_879/hill_climbing_sideways_25.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f10_l-d_kp_20_879"}' \
+-aa '{"max_sideways_moves": 25}'
+
+$solve knapsack hill_climbing_random_restart \
+-i ${states_dir}/knapsack_easy_20_879.csv -o ${knapsack_solution_dir}/easy_20_879/hill_climbing_random_restart.csv \
+-pa '{"path": "experiments/knapskack/instances/easy/f10_l-d_kp_20_879"}' \
+-aa '{"exhaustive": 0, "time_limit": 2}'
+
+mkdir -p ${knapsack_solution_dir}/hard_200_1000_1
+
+$solve knapsack hill_climbing \
+-i ${states_dir}/knapsack_hard_200_1000_1.csv -o ${knapsack_solution_dir}/hard_200_1000_1/hill_climbing.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_1_200_1000_1"}'
+
+$solve knapsack hill_climbing_sideways \
+-i ${states_dir}/knapsack_hard_200_1000_1.csv -o ${knapsack_solution_dir}/hard_200_1000_1/hill_climbing_sideways_25.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_1_200_1000_1"}' \
+-aa '{"max_sideways_moves": 25}'
+
+$solve knapsack hill_climbing_random_restart \
+-i ${states_dir}/knapsack_hard_200_1000_1.csv -o ${knapsack_solution_dir}/hard_200_1000_1/hill_climbing_random_restart.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_1_200_1000_1"}' \
+-aa '{"exhaustive": 0, "time_limit": 10}'
+
+mkdir -p ${knapsack_solution_dir}/hard_1000_1000_2
+
+$solve knapsack hill_climbing \
+-i ${states_dir}/knapsack_hard_1000_1000_2.csv -o ${knapsack_solution_dir}/hard_1000_1000_2/hill_climbing.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_1000_1000_1"}'
+
+$solve knapsack hill_climbing_sideways \
+-i ${states_dir}/knapsack_hard_1000_1000_2.csv -o ${knapsack_solution_dir}/hard_1000_1000_2/hill_climbing_sideways_25.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_1000_1000_1"}' \
+-aa '{"max_sideways_moves": 25}'
+
+$solve knapsack hill_climbing_random_restart \
+-i ${states_dir}/knapsack_hard_1000_1000_2.csv -o ${knapsack_solution_dir}/hard_1000_1000_2/hill_climbing_random_restart.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_1000_1000_1"}' \
+-aa '{"exhaustive": 0, "time_limit": 10}'
+
+mkdir -p ${knapsack_solution_dir}/hard_100_1000_2
+
+$solve knapsack hill_climbing \
+-i ${states_dir}/knapsack_hard_100_1000_2.csv -o ${knapsack_solution_dir}/hard_100_1000_2/hill_climbing.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_100_1000_1"}'
+
+$solve knapsack hill_climbing_sideways \
+-i ${states_dir}/knapsack_hard_100_1000_2.csv -o ${knapsack_solution_dir}/hard_100_1000_2/hill_climbing_sideways_25.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_100_1000_1"}' \
+-aa '{"max_sideways_moves": 25}'
+
+$solve knapsack hill_climbing_random_restart \
+-i ${states_dir}/knapsack_hard_100_1000_2.csv -o ${knapsack_solution_dir}/hard_100_1000_2/hill_climbing_random_restart.csv \
+-pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_100_1000_1"}' \
+-aa '{"exhaustive": 0, "time_limit": 60}'
