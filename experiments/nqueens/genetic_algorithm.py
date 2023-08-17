@@ -1,5 +1,6 @@
 from algorithms.local.genetic import GeneticSearch
-from constants import fitness, INVERSE_N_CONFLICTS
+from constants import INVERSE_N_CONFLICTS_FITNESS
+from heuristics.nqueens import NQueensHeuristic
 from problems.nqueens import NQueensProblem
 
 
@@ -7,6 +8,7 @@ def main(dimension, num_generations_list, sol_per_pop_list, selection_method_lis
     iterations = 100
     dimension = 8
     problem = NQueensProblem(dimension=dimension)
+    fitness = NQueensHeuristic().create(INVERSE_N_CONFLICTS_FITNESS)
     num_genes = dimension
     for num_generations in num_generations_list:
         for sol_per_pop in sol_per_pop_list:
@@ -18,7 +20,7 @@ def main(dimension, num_generations_list, sol_per_pop_list, selection_method_lis
                         algorithm = GeneticSearch(
                             num_generations=num_generations,
                             num_parents_mating=2,
-                            fitness_func=fitness[INVERSE_N_CONFLICTS],
+                            fitness_func=fitness,
                             num_genes=num_genes,
                             sol_per_pop=sol_per_pop,
                             gene_type=int,
