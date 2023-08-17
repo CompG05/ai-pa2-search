@@ -1,9 +1,8 @@
 #/bin/sh
 
-# solve="python solve.py"
-# 
-# states_dir="reports/states"
-# solution_dir="reports/solutions"
+#solve="python solve.py"
+#states_dir="reports/states"
+#solution_dir="reports/solutions"
 # eight_queens_solution_dir="${solution_dir}/eight_queens"
 # sixteen_queens_solution_dir="${solution_dir}/sixteen_queens"
 # thirty_two_queens_solution_dir="${solution_dir}/thirty_two_queens"
@@ -67,7 +66,7 @@
 # # Knapsack
 # 
 # 
-# knapsack_solution_dir="${solution_dir}/knapsack"
+#knapsack_solution_dir="${solution_dir}/knapsack"
 # mkdir -p ${knapsack_solution_dir}/easy_10_269
 # 
 # $solve knapsack hill_climbing \
@@ -164,32 +163,37 @@
 # -pa '{"path": "experiments/knapskack/instances/hard/knapPI_2_100_1000_1"}' \
 # -aa '{"exhaustive": 0, "time_limit": 60}'
 #
-echo 1
+#echo 1
+#
+#python solve.py nqueens simulated_annealing \
+#-i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_1.csv \
+#-pa '{"dimension": 32}' \
+#-aa '{"init_temp": 1, "cooling_rate": 0.00075, "min_temp": 0.000007, "time_limit": 60.0}'
+#
+#echo 2
+#
+#python solve.py nqueens simulated_annealing \
+#-i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_2.csv \
+#-pa '{"dimension": 32}' \
+#-aa '{"init_temp": 1.5, "cooling_rate": 0.00075, "min_temp": 0.000007, "time_limit": 60.0}'
+#
+#echo 3
+#
+#python solve.py nqueens simulated_annealing \
+#-i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_3.csv \
+#-pa '{"dimension": 32}' \
+#-aa '{"init_temp": 1, "cooling_rate": 0.0001, "min_temp": 0.000007, "time_limit": 60.0}'
+#
+#echo 4
+#
+#python solve.py nqueens simulated_annealing \
+#-i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_4.csv \
+#-pa '{"dimension": 32}' \
+#-aa '{"init_temp": 1, "cooling_rate": 0.00075, "min_temp": 0.000001, "time_limit": 60.0}'
+#
+#print()
 
-python solve.py nqueens simulated_annealing \
--i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_1.csv \
--pa '{"dimension": 32}' \
--aa '{"init_temp": 1, "cooling_rate": 0.00075, "min_temp": 0.000007, "time_limit": 60.0}'
-
-echo 2
-
-python solve.py nqueens simulated_annealing \
--i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_2.csv \
--pa '{"dimension": 32}' \
--aa '{"init_temp": 1.5, "cooling_rate": 0.00075, "min_temp": 0.000007, "time_limit": 60.0}'
-
-echo 3
-
-python solve.py nqueens simulated_annealing \
--i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_3.csv \
--pa '{"dimension": 32}' \
--aa '{"init_temp": 1, "cooling_rate": 0.0001, "min_temp": 0.000007, "time_limit": 60.0}'
-
-echo 4
-
-python solve.py nqueens simulated_annealing \
--i reports/states/thirtytwoqueens.csv -o reports/solutions/thirty_two_queens/simulated_annealing_4.csv \
--pa '{"dimension": 32}' \
--aa '{"init_temp": 1, "cooling_rate": 0.00075, "min_temp": 0.000001, "time_limit": 60.0}'
-
-print()
+python solve.py nqueens genetic \
+-i reports/states/eightqueens.csv -o reports/solutions/eight_queens/genetic0.csv \
+-pa '{"dimension": 8}' \
+-aa '{"num_generations": 200, "num_parents_mating": 2, "sol_per_pop": 200, "parent_selection_type": "rank", "keep_elitism": 30}'
