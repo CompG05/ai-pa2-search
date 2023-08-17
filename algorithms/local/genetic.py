@@ -5,27 +5,27 @@ from problems.problem import Problem
 
 
 class GeneticSearch(SearchAlgorithm):
-    def __init__(self, **kwargs):
+    def __init__(self, heuristic, **kwargs):
         """Required parameters:
-            - num_generations
-            - num_parents_mating
+            - num_generations +
+            - num_parents_mating +
         Optional parameters:
             - fitness_func
-            - sol_per_pop: number of solutions in the population
+            - sol_per_pop: number of solutions in the population  +
             - initial_population
-            - num_genes: number of genes in the chromosome
+            - num_genes: number of genes in the chromosome  +
             - gene_type
-            - parent_selection_type: 'sss' | 'rws' | 'sus' | 'rank' | 'random' | 'tournament'
+            - parent_selection_type: 'sss' | 'rws' | 'sus' | 'rank' | 'random' | 'tournament'   +
             - keep_parents
-            - keep_elitism
+            - keep_elitism  +
             - K_tournament
-            - crossover_type
+            - crossover_type  +
             - crossover_probability
             - mutation_type: 'random' | 'swap' | 'scramble' | 'inversion' | 'adaptive'
             - mutation_probability
         """
         super().__init__()
-        self.ga_instance = pygad.GA(**kwargs)
+        self.ga_instance = pygad.GA(fitness_func=heuristic, **kwargs)
 
     def search(self, problem: Problem) -> Node:
         self.ga_instance.run()

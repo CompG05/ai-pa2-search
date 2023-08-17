@@ -17,9 +17,12 @@ class AlgorithmFactory:
             return algorithms[algorithm](heuristic, kwargs.get("exhaustive"),
                                          kwargs.get("time_limit"))
 
-
         elif algorithm.lower() == SIMULATED_ANNEALING:
             return algorithms[algorithm](heuristic, **kwargs)
+
+        elif algorithm.lower() == GENETIC:
+            return algorithms[algorithm](heuristic, **kwargs)
+
         else:
             raise ValueError(f"Algorithm {algorithm} not found")
 
