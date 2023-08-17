@@ -22,7 +22,14 @@ def main():
     problem_args = json.loads(args.problem_args) if args.problem_args else {}
     algorithm_args = json.loads(args.algorithm_args) if args.algorithm_args else {}
 
-    heuristic = args.heuristic or heuristics[args.problem][0]
+    if args.algorithm == "genetic":
+        heuristic = fitness[args.problem][0]
+    else:
+        heuristic = heuristics[args.problem][0]
+    heuristic = args.heuristic or heuristic
+
+    if not heuristic:
+        heuristic = heuristics[args.problem][0]
 
     with open(args.input, 'r') as inp:
         initial_states = read_initial_states(args.problem, inp)
@@ -31,6 +38,7 @@ def main():
 
     for state in initial_states:
         problem_args['initial_state'] = state
+
         solver = Solver(args.problem, args.algorithm, heuristic, problem_args, algorithm_args)
 
         signal.alarm(TIME_LIMIT)

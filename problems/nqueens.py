@@ -89,6 +89,10 @@ class NQueensProblem(Problem):
         self.dimension = dimension
         self.state_factory = NQueensStateFactory(self.dimension)
 
+    @property
+    def default_genetic_args(self):
+        return {'num_genes': self.dimension, 'gene_type': int, 'gene_space': list(range(0, self.dimension))}
+
     def enabled_actions(self, state: NQueensState) -> list[Action]:
         return [
             NQueensAction(column, new_row)

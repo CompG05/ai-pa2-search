@@ -159,6 +159,10 @@ class KnapsackProblem(Problem):
         self.actions = [Switch(i) for i in range(len(values))]
         self.state_factory = KnapsackStateFactory(weights, values, sack_cap)
 
+    @property
+    def default_genetic_args(self):
+        return {'num_genes': len(self.value), 'gene_type': bool}
+
     def is_goal(self, _) -> bool:
         return False
 
