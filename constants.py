@@ -51,5 +51,5 @@ heuristics = {
 
 fitness = {
     NQUEENS: [INVERSE_N_CONFLICTS_FITNESS],
-    KNAPSACK: [ACCUM_VALUE_FITNESS],
+    KNAPSACK: [ACCUM_VALUE],
 }

@@ -197,3 +197,8 @@ python solve.py nqueens genetic \
 -i reports/states/eightqueens.csv -o reports/solutions/eight_queens/genetic0.csv \
 -pa '{"dimension": 8}' \
 -aa '{"num_generations": 200, "num_parents_mating": 2, "sol_per_pop": 200, "parent_selection_type": "rank", "keep_elitism": 30}'
+
+python solve.py knapsack genetic \
+-i reports/states/knapsack_easy_10_269.csv -o reports/solutions/knapsack/genetic0.csv \
+-pa '{"path": "experiments/knapsack/instances/easy/f1_l-d_kp_10_269"}' \
+-aa '{"num_generations": 200, "num_parents_mating": 2, "sol_per_pop": 200, "parent_selection_type": "rank", "keep_elitism": 30}'
