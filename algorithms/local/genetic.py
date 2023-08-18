@@ -5,7 +5,7 @@ from problems.problem import Problem
 
 
 class GeneticSearch(SearchAlgorithm):
-    def __init__(self, heuristic, **kwargs):
+    def __init__(self, **kwargs):
         """Required parameters:
             - num_generations +
             - num_parents_mating +
@@ -25,7 +25,7 @@ class GeneticSearch(SearchAlgorithm):
             - mutation_probability
         """
         super().__init__()
-        self.ga_instance = pygad.GA(fitness_func=heuristic, **kwargs)
+        self.ga_instance = pygad.GA(**kwargs)
 
     def search(self, problem: Problem) -> Node:
         self.ga_instance.run()

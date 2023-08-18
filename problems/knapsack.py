@@ -161,7 +161,11 @@ class KnapsackProblem(Problem):
 
     @property
     def default_genetic_args(self):
-        return {'num_genes': len(self.value), 'gene_type': bool}
+        from heuristics.knapsack import KnapsackHeuristic
+        return {'num_genes': len(self.value), 'gene_space': [0, 1], 'fitness_func': KnapsackHeuristic().create_fitness("accumulated_value", self)}
+
+    def state_from_list(self, content: list[bool]) -> KnapsackState:
+        return KnapsackState(content, self.weight, self.value, self.sack_cap)
 
     def is_goal(self, _) -> bool:
         return False
