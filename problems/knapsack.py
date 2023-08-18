@@ -1,5 +1,4 @@
 import random
-from algorithms.search_algorithm import Node
 
 from problems.problem import Problem, Action, State, StateFactory
 
@@ -162,29 +161,17 @@ class KnapsackProblem(Problem):
 
     @property
     def default_genetic_args(self):
-        return {'num_genes': len(self.value), 'gene_type': int, 'gene_space': [0, 1], 'fitness_func': self.value_fitness()}
+        from heuristics.knapsack import KnapsackHeuristic
+        return {'num_genes': len(self.value), 'gene_space': [0, 1], 'fitness_func': KnapsackHeuristic().create_fitness("accumulated_value", self)}
 
-    def value_fitness(self):
-        def fitness_func(fst, solution=None, _=None):
-            if solution is not None:
-                state = KnapsackState(solution, self.weight, self.value, self.sack_cap)
-                node = Node(state)
-            else:
-                node = fst
-
-            from heuristics.knapsack import KnapsackHeuristic
-            return KnapsackHeuristic().create("accumulated_value")(node) if node.state.is_valid() else 0
-
-        return fitness_func
+    def state_from_list(self, content: list[bool]) -> KnapsackState:
+        return KnapsackState(content, self.weight, self.value, self.sack_cap)
 
     def is_goal(self, _) -> bool:
         return False
 
     def enabled_actions(self, s: KnapsackState) -> list[Switch]:
         return [action for action in self.actions if action.is_enabled(s)]
-
-    def state_from_list(self, l: list[bool]) -> KnapsackState:
-        return KnapsackState(l, self.weight, self.value, self.sack_cap)
 
     @classmethod
     def from_file(cls, path: str, content=None) -> 'KnapsackProblem':
