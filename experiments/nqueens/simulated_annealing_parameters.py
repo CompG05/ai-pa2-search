@@ -12,17 +12,17 @@ def main():
 
     initial_temperatures = [1]  # [1]
     cooling_rates = [0.001]  # [0.005, 0.001]
-    limits = [4500]  # [0.000001]
+    min_temps = [0.00001]  # [0.000001]
 
     n_conflicts = NQueensHeuristic().create(INVERSE_N_CONFLICTS)
-    sim_annealing = SimulatedAnnealing(n_conflicts)
-    iterations = 1
+
+    iterations = 15
     _, ax = plt.subplots()
 
-    for min_temp in limits:
+    for min_temp in min_temps:
         for init_temp in initial_temperatures:
             for cooling_rate in cooling_rates:
-                sim_annealing.set_schedule(init_temp, cooling_rate, min_temp)
+                sim_annealing = SimulatedAnnealing(n_conflicts, init_temp=init_temp, cooling_rate=cooling_rate, min_temp=min_temp)
                 solutions = 0
                 steps = []
                 times = []

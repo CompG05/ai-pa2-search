@@ -3,10 +3,10 @@ from solver.local_solver import LocalSolver
 
 
 def main():
-    file_name = "hard/knapPI_1_100_1000_1"
+    file_name = "easy/f1_l-d_kp_10_269"
     iterations = 10
 
-    with open("instances/optimum/" + file_name, "r") as f:
+    with open("instances/" + file_name + "_op", "r") as f:
         optimum = int(f.readline())
 
     print(f"Optimum: {optimum}")

@@ -12,7 +12,7 @@ import os
 def main():
     configs = [(100, 0.0001, 0.0001)]
     iterations = 10
-    file_name_list = ["easy/" + file for file in os.listdir("instances/easy")]
+    file_name_list = ["easy/" + file for file in os.listdir("instances/easy") if file[-1] != 'p']
 
     for init_temp, cooling_rate, min_temp in configs:
         print(
@@ -23,7 +23,7 @@ def main():
             if not os.path.exists("reports/" + file_name):
                 write_header("reports/" + file_name)
 
-            with open("instances/optimum/" + file_name) as f:
+            with open("instances/" + file_name + "_op") as f:
                 optimum = float(f.readline())
             print(f"Instance: {file_name}")
             print("Optimum:", optimum)
