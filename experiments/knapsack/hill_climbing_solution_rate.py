@@ -17,7 +17,7 @@ def main():
             algorithm,
             ACCUM_VALUE,
             problem_kwargs={"path": "instances/" + file_name},
-            algorithm_kwargs={"max_sideways_moves": 100, "exhaustive": False, "max_iterations": 10000})
+            algorithm_kwargs={"max_sideways_moves": 100, "exhaustive": False, "time_limit": 10})
         solved = 0
 
         values = []

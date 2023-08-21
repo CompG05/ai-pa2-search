@@ -28,6 +28,9 @@ class KnapsackState(State):
 
     @property
     def sack_value(self) -> float:
+        if not self.is_valid():
+            return 0
+
         v = 0
         for i in range(len(self.data)):
             v += self.value[i] if self.data[i] else 0
