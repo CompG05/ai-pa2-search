@@ -30,4 +30,6 @@ class GeneticSearch(SearchAlgorithm):
     def search(self, problem: Problem) -> Node:
         self.ga_instance.run()
         solution, solution_fitness, solution_idx = self.ga_instance.best_solution()
-        return Node(problem.state_from_list(solution))
+        node = Node(problem.state_from_list(solution))
+        node.accum_nodes = self.ga_instance.generations_completed
+        return node

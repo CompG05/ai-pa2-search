@@ -15,6 +15,7 @@ def main():
     group.add_argument("--file", "-f", type=str)
     group.add_argument("--dir", "-d", type=str)
     parser.add_argument("--algorithm-args", "-a", type=str)
+    parser.add_argument("--iterations", "-i", type=int, default=50)
     args = parser.parse_args()
     algorithm_args = json.loads(args.algorithm_args)
 
@@ -28,18 +29,19 @@ def main():
     values = []
 
     for file_name in file_name_list:
-        problem = KnapsackProblem.from_file(file_name)
-        algorithm_args.update(problem.default_genetic_args)
-        algorithm = GeneticSearch(**algorithm_args)
-        heuristic = KnapsackHeuristic().create(ACCUM_VALUE)
+        for _ in range(50):
+            problem = KnapsackProblem.from_file(file_name)
+            algorithm_args.update(problem.default_genetic_args)
+            algorithm = GeneticSearch(**algorithm_args)
+            heuristic = KnapsackHeuristic().create(ACCUM_VALUE)
 
-        bef = time.time()
-        solution = algorithm.search(problem)
-        aft = time.time()
-        value = heuristic(solution)
+            bef = time.time()
+            solution = algorithm.search(problem)
+            aft = time.time()
+            value = heuristic(solution)
 
-        times.append(aft - bef)
-        values.append(value)
+            times.append(aft - bef)
+            values.append(value)
 
     print(f"{args.algorithm_args}\n"
           f"\tmean value: %.2f\n" % (sum(values) / len(values)),
