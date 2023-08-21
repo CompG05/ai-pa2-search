@@ -1,5 +1,5 @@
 from constants import ACCUM_VALUE, hill_climbing_algorithms, KNAPSACK
-from solver.solver import Solver
+from solver.local_solver import LocalSolver
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     print(f"Optimum: {optimum}")
 
     for algorithm in hill_climbing_algorithms:
-        solver = Solver(
+        solver = LocalSolver(
             KNAPSACK,
             algorithm,
             ACCUM_VALUE,

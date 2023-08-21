@@ -1,9 +1,9 @@
-from solver.solver import Solver
+from solver.local_solver import LocalSolver
 from constants import *
 
 
 def main():
-    solver = Solver(
+    solver = LocalSolver(
         NQUEENS,
         HILL_CLIMBING_RANDOM_RESTART,
         INVERSE_N_CONFLICTS,

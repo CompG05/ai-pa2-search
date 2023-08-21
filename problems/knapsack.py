@@ -65,6 +65,9 @@ class KnapsackState(State):
 
         return f"Knapsack{s}"
 
+    def to_list(self):
+        return self.data
+
     def to_csv(self) -> str:
         return ','.join(map(str, map(int, self.data)))
 

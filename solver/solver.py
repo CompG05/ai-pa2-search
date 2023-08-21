@@ -2,26 +2,22 @@ import time
 import tracemalloc as tm
 from typing import Optional
 
-from factories.algorithm_factory import algorithm_factory
-from factories.problem_factory import problem_factory
-
 from solver.solution import Solution
-from constants import *
 
 
 class Solver:
     def __init__(
-            self, problem: str, algorithm: str, heuristic: Optional[str], problem_kwargs=None, algorithm_kwargs=None
+        self,
+        problem: str,
+        algorithm: str,
+        heuristic: str,
+        problem_kwargs: Optional[dict] = None,
+        algorithm_kwargs: Optional[dict] = None,
     ):
         self.problem_kwargs = problem_kwargs or {}
         self.algorithm_kwargs = algorithm_kwargs or {}
-        self.problem, heuristic_factory = problem_factory.create(problem, **self.problem_kwargs)
-        if algorithm == GENETIC:
-            for key in self.problem.default_genetic_args.keys():
-                self.algorithm_kwargs[key] = self.problem.default_genetic_args[key]
-        self.heuristic = heuristic_factory.create(heuristic) if heuristic else None
-        self.algorithm = algorithm_factory.create(algorithm, self.heuristic, **self.algorithm_kwargs)
         self.algorithm_name = algorithm
+        self.problem_name = problem
         self.heuristic_name = heuristic
 
     def solve(self) -> Solution:
@@ -32,7 +28,7 @@ class Solver:
         memory_peak = tm.get_traced_memory()[1]
         aft_time = time.time()
         tm.stop()
-        node_value = self.heuristic(node) if self.heuristic else 0
+        node_value = self.heuristic(node)
 
         return Solution(
             node=node,

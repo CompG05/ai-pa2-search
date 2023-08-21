@@ -2,7 +2,7 @@ from typing import Callable
 
 from algorithms.search_algorithm import Node
 from constants import ACCUM_VALUE, ACCUM_RATING
-from problems.knapsack import KnapsackProblem
+from problems.knapsack import KnapsackProblem, KnapsackState
 
 
 class KnapsackHeuristic:
@@ -25,9 +25,13 @@ class KnapsackHeuristic:
     def create_fitness(self, heuristic_name: str, problem: KnapsackProblem) -> Callable:
         heuristic = self.create(heuristic_name)
 
-        def fitness_func(_, solution, _0):
-            state = problem.state_from_list(solution)
-            node = Node(state)
-            return heuristic(node) if state.is_valid() else 0
+        def fitness_func(fst, solution=None, _=None):
+            if solution is not None:
+                state = KnapsackState(solution, problem.weight, problem.value, problem.sack_cap)
+                node = Node(state)
+            else:
+                node = fst
+
+            return heuristic(node) if node.state.is_valid() else 0
 
         return fitness_func

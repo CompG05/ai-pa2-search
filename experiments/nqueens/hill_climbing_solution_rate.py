@@ -1,7 +1,7 @@
 import sys
 
 from constants import NQUEENS, INVERSE_N_CONFLICTS, hill_climbing_algorithms
-from solver.solver import Solver
+from solver.local_solver import LocalSolver
 
 
 def main():
@@ -13,12 +13,13 @@ def main():
     iterations = int(sys.argv[2])
 
     for algorithm in hill_climbing_algorithms:
-        solver = Solver(
+        solver = LocalSolver(
             NQUEENS,
             algorithm,
             INVERSE_N_CONFLICTS,
             problem_kwargs={"dimension": dimension},
-            algorithm_kwargs={"max_sideways_moves": 100, "exhaustive": True})
+            algorithm_kwargs={"max_sideways_moves": 100, "exhaustive": True},
+        )
         solved = 0
 
         for _ in range(iterations):
