@@ -1,0 +1,4 @@
+algorithm,heuristic,algorithm args,final state,value,time,generated nodes,max memory usage
+simulated_annealing,accumulated_value,"{'init_temp': 100, 'cooling_rate': 0.0001, 'min_temp': 0.0001, 'time_limit': 90}","Knapsack[('w: 15.0', 'v: 33.0'), ('w: 20.0', 'v: 24.0'), ('w: 17.0', 'v: 36.0'), ('w: 8.0', 'v: 37.0')]",130.0,4.368531703948975,88,5806184
+simulated_annealing,accumulated_value,"{'init_temp': 100, 'cooling_rate': 0.0001, 'min_temp': 0.0001, 'time_limit': 90}","Knapsack[('w: 15.0', 'v: 33.0'), ('w: 20.0', 'v: 24.0'), ('w: 17.0', 'v: 36.0'), ('w: 8.0', 'v: 37.0')]",130.0,4.353655576705933,33,5889328
+simulated_annealing,accumulated_value,"{'init_temp': 100, 'cooling_rate': 0.0001, 'min_temp': 0.0001, 'time_limit': 90}","Knapsack[('w: 15.0', 'v: 33.0'), ('w: 20.0', 'v: 24.0'), ('w: 17.0', 'v: 36.0'), ('w: 8.0', 'v: 37.0')]",130.0,4.333729982376099,372,5852936
