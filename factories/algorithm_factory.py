@@ -21,7 +21,7 @@ class AlgorithmFactory:
             return algorithms[algorithm](heuristic, **kwargs)
 
         elif algorithm.lower() == GENETIC:
-            return algorithms[algorithm](**kwargs)
+            return algorithms[algorithm](heuristic, **kwargs)
 
         else:
             raise ValueError(f"Algorithm {algorithm} not found")

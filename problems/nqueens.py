@@ -21,7 +21,7 @@ class NQueensState(State):
         conflicts = 0
 
         for c1, r1 in occupied_cells:
-            for c2, r2 in occupied_cells[c1 + 1 :]:
+            for c2, r2 in occupied_cells[c1 + 1:]:
                 conflicts += self.conflicted(r1, c1, r2, c2)
 
         return conflicts
@@ -71,9 +71,9 @@ class NQueensAction(Action):
 
     def __eq__(self, other):
         return (
-            isinstance(other, NQueensAction)
-            and self.column == other.column
-            and self.new_row == other.new_row
+                isinstance(other, NQueensAction)
+                and self.column == other.column
+                and self.new_row == other.new_row
         )
 
     def __repr__(self):
@@ -91,7 +91,8 @@ class NQueensProblem(Problem):
 
     @property
     def default_genetic_args(self):
-        return {'num_genes': self.dimension, 'gene_type': int, 'gene_space': list(range(0, self.dimension))}
+        return {'num_genes': self.dimension, 'gene_type': int, 'gene_space': list(range(0, self.dimension)),
+                'mutation_percent_genes': 1 / 8}
 
     def enabled_actions(self, state: NQueensState) -> list[Action]:
         return [

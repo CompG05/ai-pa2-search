@@ -3,8 +3,6 @@ import sys
 from typing import Callable
 import time
 
-import PIL.Image
-
 from algorithms.search_algorithm import SearchAlgorithm, Node
 from problems.problem import Problem, State
 

@@ -14,7 +14,7 @@ class NQueensHeuristic:
         else:
             raise ValueError("Heuristic not found")
 
-    def create_fitness(self, heuristic_name: str) -> Callable:
+    def create_fitness(self, heuristic_name: str, _) -> Callable:
         heuristic = self.create(heuristic_name)
 
         def fitness_func(fst, solution=None, _=None):
