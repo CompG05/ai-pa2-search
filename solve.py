@@ -8,7 +8,7 @@ from solver.genetic_solver import GeneticSolver
 from solver.solution import Solution
 from solver.local_solver import LocalSolver
 
-TIME_LIMIT = 90
+# TIME_LIMIT = 90
 
 def main():
     parser = argparse.ArgumentParser(prog='solve.py', description='Solve a problem using some search algorithm.')
@@ -38,7 +38,7 @@ def main():
         else:
             solver = LocalSolver(args.problem, args.algorithm, heuristic, problem_args, algorithm_args)
 
-        signal.alarm(TIME_LIMIT)
+        # signal.alarm(TIME_LIMIT)
         try:
             solution = solver.solve()
         except TimeoutError:
