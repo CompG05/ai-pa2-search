@@ -13,29 +13,39 @@ def dpll_satisfiable(s, branching_heuristic=no_branching_heuristic):
     >>> dpll_satisfiable(A |'<=>'| B) == {A: True, B: True}
     True
     """
+    return dpll(conjuncts(to_cnf(s)), prop_symbols(s), {}, branching_heuristic)[0]
+
+
+def dpll_satisfiable_with_count(s, branching_heuristic=no_branching_heuristic):
     return dpll(conjuncts(to_cnf(s)), prop_symbols(s), {}, branching_heuristic)
 
 
 def dpll(clauses, symbols, model, branching_heuristic=no_branching_heuristic):
-    """See if the clauses are true in a partial model."""
-    unknown_clauses = []  # clauses with an unknown truth value
-    for c in clauses:
-        val = pl_true(c, model)
-        if val is False:
-            return False
-        if val is None:
-            unknown_clauses.append(c)
-    if not unknown_clauses:
-        return model
-    P, value = find_pure_symbol(symbols, unknown_clauses)
-    if P:
-        return dpll(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic)
-    P, value = find_unit_clause(clauses, model)
-    if P:
-        return dpll(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic)
-    P, value = branching_heuristic(symbols, unknown_clauses)
-    return (dpll(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic) or
-            dpll(clauses, remove_all(P, symbols), extend(model, P, not value), branching_heuristic))
+    dpll.counter = 0
+
+    def dpll_aux(clauses, symbols, model, branching_heuristic=no_branching_heuristic):
+        """See if the clauses are true in a partial model."""
+        dpll.counter += 1
+        unknown_clauses = []  # clauses with an unknown truth value
+        for c in clauses:
+            val = pl_true(c, model)
+            if val is False:
+                return False
+            if val is None:
+                unknown_clauses.append(c)
+        if not unknown_clauses:
+            return model
+        P, value = find_pure_symbol(symbols, unknown_clauses)
+        if P:
+            return dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic)
+        P, value = find_unit_clause(clauses, model)
+        if P:
+            return dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic)
+        P, value = branching_heuristic(symbols, unknown_clauses)
+        return (dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value), branching_heuristic) or
+                dpll_aux(clauses, remove_all(P, symbols), extend(model, P, not value), branching_heuristic))
+
+    return dpll_aux(clauses, symbols, model, branching_heuristic), dpll.counter
 
 
 def conjuncts(s):
