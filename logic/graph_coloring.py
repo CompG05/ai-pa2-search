@@ -7,8 +7,14 @@ from structures.graph import Graph
 
 
 def graph_to_expr(g: Graph, k: int):
-    """Converts a graph coloring problem with k colors into a propositional logic expression"""
+    """
+    Converts a graph coloring problem with k colors into a propositional logic expression.
+    - Every node can be of any color
+    - Each node can only be of one color
+    - If node A is of color C, then all its adjacents are not of color C
+    """
     nodes = list(g.nodes())
+    nodes.sort()  # To make it deterministic
     e = ""
 
     def negate_color_for_states(color: int, states: Iterable):
@@ -17,6 +23,8 @@ def graph_to_expr(g: Graph, k: int):
 
     def var(v: str, c: int):
         return f"{v}{c}"
+
+    # All nodes must have at least one color
 
     all_nodes_with_all_colors_list = []
     for v in nodes:
@@ -28,6 +36,8 @@ def graph_to_expr(g: Graph, k: int):
         all_nodes_with_all_colors_list.append(v_with_all_colors)
     all_nodes_with_all_colors = "(" + " & ".join(all_nodes_with_all_colors_list) + ")"
 
+    # Each node can only be of one color
+
     each_node_only_one_color_l = []
     for v in nodes:
         if k == 1:  # If there is only one color, no need to check for other colors
@@ -36,12 +46,11 @@ def graph_to_expr(g: Graph, k: int):
         for c in range(0, k):
             v_only_c = f"({var(v, c)} ==> "
             other_colors_denied = []
-            for other_c in range(0, k):
-                if c == other_c:
-                    continue
+            for other_c in range(c + 1, k):
                 other_colors_denied.append(f"~{var(v, other_c)}")
             v_only_c += " & ".join(other_colors_denied) + ")"
-            v_only_one_color_l.append(v_only_c)
+            if len(other_colors_denied) != 0:
+                v_only_one_color_l.append(v_only_c)
         v_only_one_color = " & ".join(v_only_one_color_l)
         each_node_only_one_color_l.append(v_only_one_color)
 
@@ -50,6 +59,8 @@ def graph_to_expr(g: Graph, k: int):
     else:
         each_node_only_one_color = "(" + " & ".join(each_node_only_one_color_l) + ")"
         e = (all_nodes_with_all_colors + " & " + each_node_only_one_color)
+
+    # Adjacent nodes must have different colors
 
     adjacents_different_color_l = []
     for v in nodes:
