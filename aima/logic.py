@@ -52,24 +52,30 @@ def dpll_select(s, early_termination=False, pure_symbol=False, unit_clause=False
     dpll_select.counter = 0
 
     def dpll_aux(clauses, symbols, model):
-        dpll_select.counter += 1
 
-        unknown_clauses = []  # clauses with an unknown truth value
-        false_clauses = []
-        for c in clauses:
-            val = pl_true(c, model)
-            if val is False:
-                false_clauses.append(c)
-                if early_termination:
+        if early_termination:
+            dpll_select.counter += 1
+            unknown_clauses = []  # clauses with an unknown truth value
+            for c in clauses:
+                val = pl_true(c, model)
+                if val is False:
                     return False
-            if val is None:
-                unknown_clauses.append(c)
+                if val is None:
+                    unknown_clauses.append(c)
 
-        if not unknown_clauses:
-            if early_termination:
+            if not unknown_clauses:
                 return model
-            elif len(symbols) == 0:
-                return model if not false_clauses else False
+
+        else:
+            if len(symbols) == 0:
+                dpll_select.counter += 1
+                for c in clauses:
+                    val = pl_true(c, model)
+                    if val is False:
+                        return False
+                return model
+            else:
+                unknown_clauses = clauses
 
         if pure_symbol:
             P, value = find_pure_symbol(symbols, unknown_clauses)
