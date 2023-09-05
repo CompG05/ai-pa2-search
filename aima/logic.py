@@ -48,20 +48,28 @@ def dpll(clauses, symbols, model, branching_heuristic=no_branching_heuristic):
     return dpll_aux(clauses, symbols, model, branching_heuristic), dpll.counter
 
 
-def dpll_select(early_termination=False, pure_symbol=False, unit_clause=False):
+def dpll_select(s, early_termination=False, pure_symbol=False, unit_clause=False):
     dpll_select.counter = 0
 
     def dpll_aux(clauses, symbols, model):
         dpll_select.counter += 1
+
         unknown_clauses = []  # clauses with an unknown truth value
+        false_clauses = []
         for c in clauses:
             val = pl_true(c, model)
             if val is False:
-                return False
+                false_clauses.append(c)
+                if early_termination:
+                    return False
             if val is None:
                 unknown_clauses.append(c)
+
         if not unknown_clauses:
-            return model
+            if early_termination:
+                return model
+            elif len(symbols) == 0:
+                return model if not false_clauses else False
 
         if pure_symbol:
             P, value = find_pure_symbol(symbols, unknown_clauses)
@@ -76,6 +84,8 @@ def dpll_select(early_termination=False, pure_symbol=False, unit_clause=False):
         P, value = first(symbols), True
         return (dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value)) or
                 dpll_aux(clauses, remove_all(P, symbols), extend(model, P, not value)))
+
+    return dpll_aux(conjuncts(to_cnf(s)), prop_symbols(s), {}), dpll_select.counter
 
 
 def conjuncts(s):
