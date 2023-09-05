@@ -1,6 +1,3 @@
-import argparse
-import json
-import os
 import sys
 import time
 
@@ -22,20 +19,21 @@ def main(file_name, iterations, **algorithm_args):
     print(f"Optimum: {optimum}")
 
     for i in range(iterations):
-        print(f"Iteration: {i+1} de {iterations}")
+        print(f"Iteration: {i+1} de {iterations}", end='\r')
         problem = KnapsackProblem.from_file(file_name)
         algorithm_args.update(problem.default_genetic_args)
-        algorithm = GeneticSearch(**algorithm_args)
-        heuristic = KnapsackHeuristic().create(ACCUM_VALUE)
+        fitness = KnapsackHeuristic().create_fitness(ACCUM_VALUE, problem)
+        algorithm = GeneticSearch(fitness, **algorithm_args)
 
         bef = time.time()
         solution = algorithm.search(problem)
         aft = time.time()
-        value = heuristic(solution)
+        value = fitness(solution)
 
         times.append(aft - bef)
         values.append(value)
         optimum_solutions += value == optimum
+    print()
 
     print(f"{algorithm_args}\n"
           f"\tmean value: %.2f\n" % (sum(values) / len(values)),
@@ -46,41 +44,41 @@ def main(file_name, iterations, **algorithm_args):
 if __name__ == '__main__':
     filename = sys.argv[1]
     iterations = int(sys.argv[2])
+    args_idx = int(sys.argv[3])
 
     args_list = [
-        # {
-        #     "num_generations": 200,
-        #     "sol_per_pop": 200,
-        #     "parent_selection_type": "rank",
-        #     "num_parents_mating": 10,
-        #     "keep_elitism": 30,
-        #     "crossover_type": "single_point"
-        # },
-        # {
-        #     "num_generations": 200,
-        #     "sol_per_pop": 200,
-        #     "parent_selection_type": "tournament",
-        #     "num_parents_mating": 2,
-        #     "keep_elitism": 30,
-        #     "crossover_type": "single_point"
-        # },
-        # {
-        #     "num_generations": 200,
-        #     "sol_per_pop": 200,
-        #     "parent_selection_type": "tournament",
-        #     "num_parents_mating": 10,
-        #     "keep_elitism": 30,
-        #     "crossover_type": "single_point"
-        # },
-        {
+        {   # solution rate: 0.80
             "num_generations": 200,
-            "sol_per_pop": 700,
+            "sol_per_pop": 200,
+            "parent_selection_type": "rank",
+            "num_parents_mating": 2,
+            "keep_elitism": 30,
+            "crossover_type": "single_point"
+        },
+        {   # solution rate: 1.0
+            "num_generations": 200,
+            "sol_per_pop": 200,
             "parent_selection_type": "tournament",
-            "num_parents_mating": 20,
-            "keep_elitism": 100,
+            "num_parents_mating": 2,
+            "keep_elitism": 30,
+            "crossover_type": "single_point"
+        },
+        {   # solution rate: 0.98
+            "num_generations": 200,
+            "sol_per_pop": 200,
+            "parent_selection_type": "rank",
+            "num_parents_mating": 10,
+            "keep_elitism": 30,
+            "crossover_type": "single_point"
+        },
+        {   # solution rate: 1.0
+            "num_generations": 200,
+            "sol_per_pop": 200,
+            "parent_selection_type": "tournament",
+            "num_parents_mating": 10,
+            "keep_elitism": 30,
             "crossover_type": "single_point"
         },
     ]
 
-    for args in args_list:
-        main(filename, iterations, **args)
+    main(filename, iterations, **args_list[args_idx])

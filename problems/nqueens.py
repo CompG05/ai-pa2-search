@@ -92,7 +92,7 @@ class NQueensProblem(Problem):
     @property
     def default_genetic_args(self):
         return {'num_genes': self.dimension, 'gene_type': int, 'gene_space': list(range(0, self.dimension)),
-                'mutation_percent_genes': 1 / 8}
+                'mutation_percent_genes': 1/8 * 100}
 
     def enabled_actions(self, state: NQueensState) -> list[Action]:
         return [
