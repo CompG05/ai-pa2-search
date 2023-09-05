@@ -1,76 +1,36 @@
+import pytest
 from aima.logic import *
+from logic.nqueens import to_expr, get_nqueens_model
+from problems.nqueens import NQueensState
+
+nqueens_expr_config = [
+    (2, expr("(((((((Q00 | Q01) & (Q10 | Q11)) & "
+             "(Q00 | Q10)) & (Q01 | Q11)) & "
+             "(Q00 ==> ((~Q01 & ~Q10) & ~Q11))) & (Q01 ==> (~Q11 & ~Q10))) & (Q10 ==> ~Q11))")),
+    (3, expr("(Q00 | Q01 | Q02) & (Q10 | Q11 | Q12) & (Q20 | Q21 | Q22) & "
+             "(Q00 | Q10 | Q20) & (Q01 | Q11 | Q21) & (Q02 | Q12 | Q22) & "
+             "(Q00 ==> (~Q01 & ~Q02 & ~Q10 & ~Q20 & ~Q11 & ~Q22)) & "
+             "(Q01 ==> (~Q02 & ~Q11 & ~Q21 & ~Q10 & ~Q12)) & "
+             "(Q02 ==> (~Q12 & ~Q22 & ~Q11 & ~Q20)) & "
+             "(Q10 ==> (~Q11 & ~Q12 & ~Q20 & ~Q21)) & "
+             "(Q11 ==> (~Q12 & ~Q21 & ~Q20 & ~Q22)) & "
+             "(Q12 ==> (~Q22 & ~Q21)) & "
+             "(Q20 ==> (~Q21 & ~Q22)) & "
+             "(Q21 ==> (~Q22))"))
+]
 
 
-def deny_all_conflicts(dimension, x, y):
-    """Return a conjunction of all conflicting cells, negated"""
-    conflicts = []
+@pytest.mark.parametrize("dimension, expected", nqueens_expr_config)
+def test_nqueens_to_expr(dimension: int, expected: Expr):
+    nqueens_expr = to_expr(dimension)
+    assert nqueens_expr == expected
 
-    # for i in range(dimension):
-    #     if i != y:
-    #         conflicts.append(f"~Q{x}{i}")
-    #     if i != x:
-    #         conflicts.append(f"~Q{i}{y}")
 
-    # Rows
-    for j in range(y+1, dimension):
-        conflicts.append(f"~Q{x}{j}")
+dimensions_config = [4, 8, 12]
 
-    # Columns
-    for i in range(x + 1, dimension):
-        conflicts.append(f"~Q{i}{y}")
 
-    for i in range(x+1, dimension):
-        for j in range(dimension):
-            if abs(i - x) == abs(j - y):
-                conflicts.append(f"~Q{i}{j}")
-
-    conflicts_str = " & ".join(conflicts)
-    return f"({conflicts_str})"
-
-def n_queens_formula(dimension):
-    str_row = ""
-    str_col = ""
-    conflicts_str = ""
-
-    for i in range(dimension):
-        str_row += "("
-        str_col += "("
-        for j in range(dimension - 1):
-            str_row += f"Q{i}{j} | "
-            str_col += f"Q{j}{i} | "
-
-        str_row += f"Q{i}{dimension-1}) & "
-        str_col += f"Q{dimension-1}{i}) & "
-
-    for i in range(dimension):
-        for j in range(dimension):
-            consecuente = deny_all_conflicts(dimension, i, j)
-            if len(consecuente) > 2:
-                conflicts_str += f"(Q{i}{j} ==> {consecuente}) & "
-    conflicts_str = conflicts_str[:-3]
-
-    return str_row + str_col + conflicts_str
-
-def test_dpll_nqueens():
-    dimension = 4
-
-    print()
-    print(n_queens_formula(dimension))
-    result: dict[Expr, bool] = dpll_satisfiable(expr(n_queens_formula(dimension)))
-    print()
-    print(result)
-    print()
-    print(len(result.keys()))
-    queens = 0
-    for v in result.values():
-        if v:
-            queens += 1
-    print(queens)
-
-    for i in range(dimension):
-        for j in range(dimension):
-            if result[expr(f"Q{i}{j}")]:
-                print("* ", end='')
-            else:
-                print("0 ", end='')
-        print()
+@pytest.mark.parametrize("dimension", dimensions_config)
+def test_nqueens_dpll(dimension: int):
+    solution = get_nqueens_model(dimension)
+    solution_state = NQueensState(solution)
+    assert solution_state.is_goal()
