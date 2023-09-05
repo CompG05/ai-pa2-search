@@ -48,6 +48,36 @@ def dpll(clauses, symbols, model, branching_heuristic=no_branching_heuristic):
     return dpll_aux(clauses, symbols, model, branching_heuristic), dpll.counter
 
 
+def dpll_select(early_termination=False, pure_symbol=False, unit_clause=False):
+    dpll_select.counter = 0
+
+    def dpll_aux(clauses, symbols, model):
+        dpll_select.counter += 1
+        unknown_clauses = []  # clauses with an unknown truth value
+        for c in clauses:
+            val = pl_true(c, model)
+            if val is False:
+                return False
+            if val is None:
+                unknown_clauses.append(c)
+        if not unknown_clauses:
+            return model
+
+        if pure_symbol:
+            P, value = find_pure_symbol(symbols, unknown_clauses)
+            if P:
+                return dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value))
+
+        if unit_clause:
+            P, value = find_unit_clause(clauses, model)
+            if P:
+                return dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value))
+
+        P, value = first(symbols), True
+        return (dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value)) or
+                dpll_aux(clauses, remove_all(P, symbols), extend(model, P, not value)))
+
+
 def conjuncts(s):
     """Return a list of the conjuncts in the sentence s.
     >>> conjuncts(A & B)
