@@ -49,33 +49,35 @@ def dpll(clauses, symbols, model, branching_heuristic=no_branching_heuristic):
 
 
 def dpll_select(s, early_termination=False, pure_symbol=False, unit_clause=False):
-    dpll_select.counter = 0
+    dpll_select.partial_counter = 0
+    dpll_select.total_counter = 0
 
     def dpll_aux(clauses, symbols, model):
-
-        if early_termination:
-            dpll_select.counter += 1
-            unknown_clauses = []  # clauses with an unknown truth value
-            for c in clauses:
-                val = pl_true(c, model)
-                if val is False:
-                    return False
-                if val is None:
-                    unknown_clauses.append(c)
-
-            if not unknown_clauses:
-                return model
-
+        if len(symbols) == 0:
+            dpll_select.total_counter += 1
         else:
-            if len(symbols) == 0:
-                dpll_select.counter += 1
-                for c in clauses:
-                    val = pl_true(c, model)
-                    if val is False:
-                        return False
-                return model
-            else:
-                unknown_clauses = clauses
+            dpll_select.partial_counter += 1
+
+        unknown_clauses = []  # clauses with an unknown truth value
+
+        exists_false_clause = False
+        for c in clauses:
+            val = pl_true(c, model)
+
+            if val is False:
+                exists_false_clause = True
+                if early_termination:
+                    return False
+
+            if val is None:
+                unknown_clauses.append(c)
+
+        if early_termination and not unknown_clauses:
+            return model
+
+        if len(symbols) == 0:
+            return False if exists_false_clause else model
+
 
         if pure_symbol:
             P, value = find_pure_symbol(symbols, unknown_clauses)
@@ -91,7 +93,7 @@ def dpll_select(s, early_termination=False, pure_symbol=False, unit_clause=False
         return (dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value)) or
                 dpll_aux(clauses, remove_all(P, symbols), extend(model, P, not value)))
 
-    return dpll_aux(conjuncts(to_cnf(s)), prop_symbols(s), {}), dpll_select.counter
+    return dpll_aux(conjuncts(to_cnf(s)), prop_symbols(s), {}), dpll_select.partial_counter, dpll_select.total_counter
 
 
 def conjuncts(s):
