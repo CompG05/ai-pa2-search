@@ -21,9 +21,6 @@ def graph_to_expr(g: Graph, k: int):
         states_with_color = [f"~{var(s, color)}" for s in states]
         return " & ".join(states_with_color)
 
-    def var(v: str, c: int):
-        return f"{v}{c}"
-
     # All nodes must have at least one color
 
     all_nodes_with_all_colors_list = []
@@ -90,7 +87,7 @@ def get_graph_coloring_model(g: Graph, k: int) -> dict[str, int] | Literal[False
 
     for v in g.nodes():
         for c in range(0, k):
-            if model[expr(f"{v}{c}")]:
+            if model[expr(var(v, c))]:
                 result[v] = c
 
     return result
@@ -114,3 +111,8 @@ def write_colored_graph_dot(path: str, g: Graph, colors: list[str], color_map: d
             graph.add_edge(pydot.Edge(n, n))
 
     graph.write(path)
+
+
+def var(v: str, c: int):
+    return f"{v.replace(' ', '_')}{c}"
+
