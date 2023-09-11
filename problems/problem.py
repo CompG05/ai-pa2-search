@@ -1,6 +1,3 @@
-from typing import Iterable
-
-
 class State:
     def __init__(self, data):
         self.data = data
@@ -18,6 +15,9 @@ class State:
         return hash(self.data)
 
     def to_csv(self) -> str:
+        raise NotImplementedError
+
+    def to_list(self) -> list:
         raise NotImplementedError
 
 

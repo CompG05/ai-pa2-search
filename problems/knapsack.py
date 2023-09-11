@@ -69,7 +69,8 @@ class KnapsackState(State):
         return f"Knapsack{s}"
 
     def to_list(self):
-        return self.data
+        # Cast list of bool to list of int
+        return list(map(int, self.data))
 
     def to_csv(self) -> str:
         return ','.join(map(str, map(int, self.data)))

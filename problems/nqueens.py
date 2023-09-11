@@ -37,6 +37,9 @@ class NQueensState(State):
             [self.data[i] in range(self.dimension) for i in range(self.dimension)]
         )
 
+    def to_list(self):
+        return list(self.data)
+
     def __repr__(self):
         return str(self.data)
 

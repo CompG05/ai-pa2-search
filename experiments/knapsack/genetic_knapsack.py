@@ -18,11 +18,16 @@ def main(file_name, iterations, **algorithm_args):
         optimum = float(f.readline())
     print(f"Optimum: {optimum}")
 
+    problem = KnapsackProblem.from_file(file_name)
+    algorithm_args.update(problem.default_genetic_args)
+    algorithm_args.update(
+        {"initial_population": [problem.state_factory.random().to_list() for _ in
+                                range(algorithm_args["sol_per_pop"])]})
+    algorithm_args.pop("sol_per_pop")
+    fitness = KnapsackHeuristic().create_fitness(ACCUM_VALUE, problem)
+
     for i in range(iterations):
         print(f"Iteration: {i+1} de {iterations}", end='\r')
-        problem = KnapsackProblem.from_file(file_name)
-        algorithm_args.update(problem.default_genetic_args)
-        fitness = KnapsackHeuristic().create_fitness(ACCUM_VALUE, problem)
         algorithm = GeneticSearch(fitness, **algorithm_args)
 
         bef = time.time()
@@ -79,6 +84,34 @@ if __name__ == '__main__':
             "keep_elitism": 30,
             "crossover_type": "single_point"
         },
+        {  # solution rate: 1.0
+            "num_generations": 50,
+            "sol_per_pop": 150,
+            "parent_selection_type": "rank",
+            "num_parents_mating": 10,
+            "keep_elitism": 10,
+            "crossover_type": "two_points"
+        },
+        {  # solution rate: 1.0
+            "num_generations": 50,
+            "sol_per_pop": 150,
+            "parent_selection_type": "rank",
+            "num_parents_mating": 10,
+            "keep_elitism": 10,
+            "crossover_type": "two_points"
+        },
+
+        {  #for hard ones
+            "num_generations": 3,
+            "sol_per_pop": 50,
+            "parent_selection_type": "rank",
+            "crossover_type": "two_points",
+            #"mutation_probability": 0.2,
+            #"mutation_type": "random",
+            "keep_parents": 2,
+            "keep_elitism": 50,
+            "num_parents_mating": 2
+        }
     ]
 
     main(filename, iterations, **args_list[args_idx])
