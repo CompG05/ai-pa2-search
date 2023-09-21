@@ -33,8 +33,11 @@ def main(dimension, iterations, **params):
 
 
 if __name__ == "__main__":
-    dimension = int(sys.argv[1])
-    iterations = int(sys.argv[2])
+    if len(sys.argv) != 4:
+        print(
+            "Usage: python -m experiments.nqueens.genetic.py <dimension> <config_idx> <iterations>"
+        )
+        exit(1)
 
     configs = {
         8: [
@@ -49,22 +52,22 @@ if __name__ == "__main__":
         ],
 
         16: [
-            # {
-            #     "num_generations": 200,
-            #     "sol_per_pop": 200,
-            #     "parent_selection_type": "rank",
-            #     "num_parents_mating": 10,
-            #     "keep_elitism": 30,
-            #     "crossover_type": "single_point"
-            # },
-            # {
-            #     "num_generations": 400,
-            #     "sol_per_pop": 200,
-            #     "parent_selection_type": "rank",
-            #     "num_parents_mating": 10,
-            #     "keep_elitism": 30,
-            #     "crossover_type": "single_point"
-            # },
+            {
+                "num_generations": 200,
+                "sol_per_pop": 200,
+                "parent_selection_type": "rank",
+                "num_parents_mating": 10,
+                "keep_elitism": 30,
+                "crossover_type": "single_point"
+            },
+            {
+                "num_generations": 400,
+                "sol_per_pop": 200,
+                "parent_selection_type": "rank",
+                "num_parents_mating": 10,
+                "keep_elitism": 30,
+                "crossover_type": "single_point"
+            },
             {
                 "num_generations": 600,
                 "sol_per_pop": 250,
@@ -76,37 +79,37 @@ if __name__ == "__main__":
         ],
 
         32: [
-            # {
-            #     "num_generations": 600,
-            #     "sol_per_pop": 400,
-            #     "parent_selection_type": "rank",
-            #     "num_parents_mating": 10,
-            #     "keep_elitism": 50,
-            #     "crossover_type": "single_point"
-            # },
+            {
+                "num_generations": 600,
+                "sol_per_pop": 400,
+                "parent_selection_type": "rank",
+                "num_parents_mating": 10,
+                "keep_elitism": 50,
+                "crossover_type": "single_point"
+            },
 
-            # {
-            #     "num_generations": 1000,
-            #     "sol_per_pop": 200,
-            #     "parent_selection_type": "rank",
-            #     "num_parents_mating": 5,
-            #     "keep_parents": 5,
-            #     "keep_elitism": 30,
-            #     "crossover_probability": 0.7,
-            # },
+            {
+                "num_generations": 1000,
+                "sol_per_pop": 200,
+                "parent_selection_type": "rank",
+                "num_parents_mating": 5,
+                "keep_parents": 5,
+                "keep_elitism": 30,
+                "crossover_probability": 0.7,
+            },
             # solution rate: 0.0
             # average value: -2.3
 
-            # {
-            #     "num_generations": 1000,
-            #     "sol_per_pop": 200,
-            #     "parent_selection_type": "tournament",
-            #     "K_tournament": 3,
-            #     "num_parents_mating": 5,
-            #     "keep_parents": 5,
-            #     "keep_elitism": 30,
-            #     "crossover_probability": 0.7,
-            # },
+            {
+                "num_generations": 1000,
+                "sol_per_pop": 200,
+                "parent_selection_type": "tournament",
+                "K_tournament": 3,
+                "num_parents_mating": 5,
+                "keep_parents": 5,
+                "keep_elitism": 30,
+                "crossover_probability": 0.7,
+            },
             # solution rate: 0.0
             # average value: -3.6
 
@@ -123,5 +126,8 @@ if __name__ == "__main__":
         ]
     }
 
-    for config in configs[dimension]:
-        main(dimension, iterations, **config)
+    dimension = int(sys.argv[1])
+    config = configs[dimension][int(sys.argv[2])]
+    iterations = int(sys.argv[3])
+
+    main(dimension, iterations, **config)

@@ -6,7 +6,7 @@ from solver.local_solver import LocalSolver
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python hill_climbing_solution_rate.py <dimension> <iterations>")
+        print("Usage: python hill_climbing.py <dimension> <iterations>")
         exit(1)
 
     dimension = int(sys.argv[1])
