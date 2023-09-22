@@ -42,7 +42,6 @@ knapsack_config = [(algorithm, state) for algorithm in hc_algorithms_knapsack fo
 def test_hill_climbing_knapsack(algorithm, state):
     p = KnapsackProblem(knapsack_weights, knapsack_values, sack_cap, state)
     solution = algorithm.search(p)
-    print(solution.state.data)
     assert h2(solution) == optimum
 
 
