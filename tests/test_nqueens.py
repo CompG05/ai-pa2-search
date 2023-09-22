@@ -1,4 +1,7 @@
 import pytest
+from algorithms.search_algorithm import Node
+from constants import N_CONFLICTS
+from heuristics.nqueens import NQueensHeuristic
 
 from problems.nqueens import NQueensState, NQueensProblem, NQueensAction
 
@@ -21,7 +24,7 @@ n_conflicts_config = [
     (NQueensState((4, 2, 1, 6, 1, 7, 5, 3)), 3),
     (NQueensState((4, 2, 1, 2, 1, 7, 5, 3)), 7),
     (NQueensState((4, 2, 1, 2, 1, 7, 5, 2)), 9),
-    (NQueensState((4, 2, 0, 6, 1, 7, 5, 1)), 1)
+    (NQueensState((4, 2, 0, 6, 1, 7, 5, 1)), 1),
 ]
 
 
@@ -31,9 +34,24 @@ def test_n_conflicts(state, expected):
 
 
 move_queen_config = [
-    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 5, 1, NQueensState((0, 1, 2, 3, 4, 1, 6, 7))),
-    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 0, 1, NQueensState((1, 1, 2, 3, 4, 5, 6, 7))),
-    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 7, 1, NQueensState((0, 1, 2, 3, 4, 5, 6, 1))),
+    (
+        NQueensState((0, 1, 2, 3, 4, 5, 6, 7)),
+        5,
+        1,
+        NQueensState((0, 1, 2, 3, 4, 1, 6, 7)),
+    ),
+    (
+        NQueensState((0, 1, 2, 3, 4, 5, 6, 7)),
+        0,
+        1,
+        NQueensState((1, 1, 2, 3, 4, 5, 6, 7)),
+    ),
+    (
+        NQueensState((0, 1, 2, 3, 4, 5, 6, 7)),
+        7,
+        1,
+        NQueensState((0, 1, 2, 3, 4, 5, 6, 1)),
+    ),
 ]
 
 
@@ -44,7 +62,7 @@ def test_move_queen(state, column, delta, expected):
 
 is_goal_config = [
     (NQueensState((6, 4, 2, 0, 5, 7, 1, 3)), True),
-    (NQueensState((4, 2, 0, 6, 1, 7, 5, 1)), False)
+    (NQueensState((4, 2, 0, 6, 1, 7, 5, 1)), False),
 ]
 
 
@@ -57,7 +75,7 @@ is_valid_config = [
     (NQueensState((0, 1, 2, 3, 4, 5, 6, -1)), False),
     (NQueensState((0, 1, 2, 3, 4, 5, 6, 8)), False),
     (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), True),
-    (NQueensState((0, 0, 0, 0, 0, 0, 0, 0)), True)
+    (NQueensState((0, 0, 0, 0, 0, 0, 0, 0)), True),
 ]
 
 
@@ -70,7 +88,11 @@ enabled_actions_config = [
     (
         NQueensState((0, 1, 2, 3, 4, 5, 6, 7)),
         # [NQueensAction(i, j) for i in [0..7] for j in [0..i-1, i+1..7]
-        [NQueensAction(i, j) for i in range(8) for j in list(range(i)) + list(range(i + 1, 8))]
+        [
+            NQueensAction(i, j)
+            for i in range(8)
+            for j in list(range(i)) + list(range(i + 1, 8))
+        ],
     )
 ]
 
@@ -78,3 +100,17 @@ enabled_actions_config = [
 @pytest.mark.parametrize("state, expected", enabled_actions_config)
 def test_enabled_actions(state, expected):
     assert NQueensProblem(8).enabled_actions(state) == expected
+
+
+@pytest.mark.parametrize(
+    "state, expected",
+    [
+        (NQueensState((0, 0, 0, 0, 0, 0, 0, 0)), 28),
+        (NQueensState((4, 2, 0, 6, 1, 7, 5, 3)), 0),
+        (NQueensState((4, 2, 1, 2, 1, 7, 5, 2)), 9),
+    ],
+)
+def test_n_conflicts_heuristic(state, expected):
+    h = NQueensHeuristic().create(N_CONFLICTS)
+    node = Node(state)
+    assert h(node) == expected
