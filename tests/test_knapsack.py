@@ -42,6 +42,6 @@ def test_action_execute(action, state, expected):
 
 
 def test_enabled_actions():
-    problem = KnapsackProblem([False] * len(weights), weights, values, cap)
+    problem = KnapsackProblem(weights, values, cap, [False] * len(weights))
 
     assert problem.enabled_actions(s([1, 3])) == [Switch(i) for i in [0, 1, 2, 3, 4, 5, 6]]

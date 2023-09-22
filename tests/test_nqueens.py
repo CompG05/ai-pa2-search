@@ -1,6 +1,6 @@
 import pytest
 
-from problems.nqueens import NQueensState
+from problems.nqueens import NQueensState, NQueensProblem, NQueensAction
 
 conflicted_config = [
     (4, 0, 7, 3, True),
@@ -31,9 +31,9 @@ def test_n_conflicts(state, expected):
 
 
 move_queen_config = [
-    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 5, 1, NQueensState((0, 1, 2, 3, 4, 6, 6, 7))),
+    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 5, 1, NQueensState((0, 1, 2, 3, 4, 1, 6, 7))),
     (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 0, 1, NQueensState((1, 1, 2, 3, 4, 5, 6, 7))),
-    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 7, 1, NQueensState((0, 1, 2, 3, 4, 5, 6, 0))),
+    (NQueensState((0, 1, 2, 3, 4, 5, 6, 7)), 7, 1, NQueensState((0, 1, 2, 3, 4, 5, 6, 1))),
 ]
 
 
@@ -64,3 +64,17 @@ is_valid_config = [
 @pytest.mark.parametrize("state, expected", is_valid_config)
 def test_is_valid(state, expected):
     assert state.is_valid() == expected
+
+
+enabled_actions_config = [
+    (
+        NQueensState((0, 1, 2, 3, 4, 5, 6, 7)),
+        # [NQueensAction(i, j) for i in [0..7] for j in [0..i-1, i+1..7]
+        [NQueensAction(i, j) for i in range(8) for j in list(range(i)) + list(range(i + 1, 8))]
+    )
+]
+
+
+@pytest.mark.parametrize("state, expected", enabled_actions_config)
+def test_enabled_actions(state, expected):
+    assert NQueensProblem(8).enabled_actions(state) == expected
