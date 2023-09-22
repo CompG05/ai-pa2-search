@@ -93,7 +93,7 @@ def dpll_select(s, early_termination=False, pure_symbol=False, unit_clause=False
         return (dpll_aux(clauses, remove_all(P, symbols), extend(model, P, value)) or
                 dpll_aux(clauses, remove_all(P, symbols), extend(model, P, not value)))
 
-    return dpll_aux(conjuncts(to_cnf(s)), prop_symbols(s), {}), dpll_select.partial_counter, dpll_select.total_counter
+    return dpll_aux(conjuncts(to_cnf(s)), prop_symbols(s), {}), dpll_select.partial_counter
 
 
 def conjuncts(s):
