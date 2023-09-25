@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -40,8 +41,7 @@ def main(file_name, iterations, **algorithm_args):
         optimum_solutions += value == optimum
     print()
 
-    print(f"{algorithm_args}\n"
-          f"\tmean value: %.2f\n" % (sum(values) / len(values)),
+    print(f"\tmean value: %.2f\n" % (sum(values) / len(values)),
           f"\tmean time: %.2f\n" % (sum(times) / len(times)),
           f"\tsolution rate: %.2f\n" % (optimum_solutions / iterations))
 
@@ -50,6 +50,13 @@ if __name__ == '__main__':
     filename = sys.argv[1]
     iterations = int(sys.argv[2])
     args_idx = int(sys.argv[3])
+
+    def custom_mutation(offspring, ga_instance):
+        for chromosome_idx in range(offspring.shape[0]):
+            if random.random() < 0.9:
+                random_gene_idx = random.choice(range(offspring.shape[1]))
+                offspring[chromosome_idx, random_gene_idx] = int(not offspring[chromosome_idx, random_gene_idx])
+        return offspring
 
     args_list = [
         {   # solution rate: 0.80
@@ -102,14 +109,23 @@ if __name__ == '__main__':
         },
 
         {  #for hard ones
-            "num_generations": 3,
-            "sol_per_pop": 50,
+            "num_generations": 200,
+            "sol_per_pop": 400,
             "parent_selection_type": "rank",
             "crossover_type": "two_points",
             #"mutation_probability": 0.2,
             #"mutation_type": "random",
             "keep_parents": 2,
             "keep_elitism": 50,
+            "num_parents_mating": 2
+        },
+        {  # Idx: 7  No crossover
+            "num_generations": 200,
+            "sol_per_pop": 400,
+            "crossover_probability": 0.0,
+            "mutation_type": custom_mutation,
+            "mutation_num_genes": 1,
+            "keep_elitism": 100,
             "num_parents_mating": 2
         }
     ]
